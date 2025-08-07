@@ -1,6 +1,7 @@
 import React from 'react'
 import { ArrowRight, BookOpen, ChartLine, Users } from 'lucide-react'
 import NavBar from '../NavBar'
+import Image from 'next/image'
 
 const BlogHeader = () => {
 	return (
@@ -80,6 +81,16 @@ const BlogHeader = () => {
 						</button>
 					</BlogHeroButtonWrapper>
 				</BlogHeroText>
+
+				<BlogHeroImage>
+					<Image
+						src="/600x400.svg"
+						alt=""
+						width={100}
+						height={100}
+						className="h-full w-full object-cover"
+					/>
+				</BlogHeroImage>
 			</BlogHero>
 		</header>
 	)
@@ -99,6 +110,16 @@ const BlogHero = ({ children, className }) => {
 
 const BlogHeroText = ({ children, className }) => {
 	return <div className={`hero-text space-y-8 ${className}`}>{children}</div>
+}
+
+const BlogHeroImage = ({ children, className }) => {
+	return (
+		<div
+			className={`hero-image h-[32rem] overflow-hidden rounded-lg bg-amber-500 ${className}`}
+		>
+			{children}
+		</div>
+	)
 }
 
 const BlogHeroTitle = ({ children, className }) => {
