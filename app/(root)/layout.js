@@ -4,7 +4,7 @@ const Layout = ({ children }) => {
 	return (
 		<>
 			<BlogHeader />
-			<main className=""></main>
+			{<main className="">{children}</main>}
 		</>
 	)
 }
