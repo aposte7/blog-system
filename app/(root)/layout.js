@@ -1,10 +1,10 @@
-import BlogHeader from '@/components/blog/BlogHeader'
+import NavBar from '@/components/NavBar'
 
 const Layout = ({ children }) => {
 	return (
 		<>
-			<BlogHeader />
-			{<main className="">{children}</main>}
+			<NavBar />
+			{children}
 		</>
 	)
 }

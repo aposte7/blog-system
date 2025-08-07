@@ -6,8 +6,6 @@ import Image from 'next/image'
 const BlogHeader = () => {
 	return (
 		<header className="header bg-blog-gradient-subtle">
-			<NavBar />
-
 			<BlogHero>
 				<BlogHeroText>
 					<BlogHeroTitle>Welcome to Blogosphere</BlogHeroTitle>
