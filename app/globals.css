@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import 'tailwindcss';
 
 @theme {
 	--color-background: hsl(var(--background));
@@ -49,6 +48,11 @@
 	--color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
 	--color-sidebar-border: hsl(var(--sidebar-border));
 	--color-sidebar-ring: hsl(var(--sidebar-ring));
+
+	--background-image-blog-gradient: var(--blog-gradient);
+	--background-image-blog-gradient-subtle: var(--blog-gradient-subtle);
+	--color--blog-shadow: var(--blog-shadow);
+	--color--blog-shadow-hover: var(--blog-shadow-hover);
 
 	--radius: var(--radius);
 }
@@ -113,6 +117,21 @@
 	--sidebar-border: 220 13% 91%;
 
 	--sidebar-ring: 217.2 91.2% 59.8%;
+
+	--blog-gradient: linear-gradient(
+		135deg,
+		hsl(262 83% 58%),
+		hsl(272 91% 68%)
+	);
+
+	--blog-gradient-subtle: linear-gradient(
+		180deg,
+		hsl(250 100% 99%),
+		hsl(250 60% 96%)
+	);
+	--blog-shadow: 0 4px 20px -2px hsl(262 83% 58% / 0.1);
+	--blog-shadow-hover: 0 8px 40px -4px hsl(262 83% 58% / 0.2);
+	--blog-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark {
@@ -157,4 +176,17 @@
 	--sidebar-accent-foreground: 240 4.8% 95.9%;
 	--sidebar-border: 240 3.7% 15.9%;
 	--sidebar-ring: 217.2 91.2% 59.8%;
+
+	--blog-gradient: linear-gradient(
+		135deg,
+		hsl(272 91% 68%),
+		hsl(262 83% 58%)
+	);
+	--blog-gradient-subtle: linear-gradient(
+		180deg,
+		hsl(240 15% 7%),
+		hsl(240 15% 12%)
+	);
+	--blog-shadow: 0 4px 20px -2px hsl(272 91% 68% / 0.15);
+	--blog-shadow-hover: 0 8px 40px -4px hsl(272 91% 68% / 0.25);
 }
