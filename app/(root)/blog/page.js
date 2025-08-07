@@ -117,15 +117,17 @@ export default function BlogHome() {
 
 	return (
 		<>
-			<div className="grid grid-cols-1 gap-5 space-y-8 bg-[rgba(240,238,246,0.2)] px-4 py-24 min-[1135px]:grid-cols-[1fr_minmax(17rem,20rem)] xl:gap-12 xl:px-10">
+			<div className="grid grid-cols-1 gap-5 space-y-8 bg-muted px-4 py-24 min-[1135px]:grid-cols-[1fr_minmax(17rem,20rem)] xl:gap-12 xl:px-10">
 				<section className="featured-blogs order-2 space-y-8 min-[1135px]:order-none">
 					<div className="featured-text-wrapper">
 						<h2 className="flex items-center justify-center gap-4 text-center text-3xl font-medium sm:text-4xl sm:font-semibold">
-							<TrendingUp size={24} color="#7c3bed" />
-							<span>Featured Articles</span>
+							<TrendingUp size={24} className="text-primary" />
+							<span className="text-foreground">
+								Featured Articles
+							</span>
 						</h2>
 
-						<p className="mt-3 text-center text-base text-[#73738c] md:text-lg">
+						<p className="mt-3 text-center text-base text-muted-foreground md:text-lg">
 							Discover our most popular and trending articles,
 							carefully curated for our readers.
 						</p>
@@ -150,7 +152,7 @@ export default function BlogHome() {
 						Latest Articles
 					</h2>
 
-					<p className="mt-3 text-center text-base text-[#73738c] md:text-sm">
+					<p className="mt-3 text-center text-base text-muted-foreground md:text-sm">
 						Stay up-to-date with the latest insights, tutorials, and
 						stories from our community of writers.
 					</p>
@@ -179,8 +181,8 @@ function BlogCard({
 	imageAlt = '',
 }) {
 	return (
-		<div className="card h-fit min-w-[23rem] overflow-hidden rounded-xl border border-[#e7e5e5]">
-			<div className="card-image-wrapper mb-5 h-[17rem] w-full bg-amber-300">
+		<div className="card h-fit bg-card min-w-[23rem] overflow-hidden rounded-xl border border-border">
+			<div className="card-image-wrapper mb-5 h-[17rem] w-full">
 				<Image
 					className="w-full h-full object-cover"
 					width={400}
@@ -189,24 +191,25 @@ function BlogCard({
 					alt={imageAlt}
 				/>
 			</div>
-			<div className="card-text divide-y divide-yellow-400 px-6 pb-7 sm:px-8">
+			<div className="card-text divide-y divide-border px-6 pb-7 sm:px-8">
 				<div className="space-y-3 py-4">
-					<p className="inline-flex rounded-full bg-[#f1effb] px-3 py-px text-sm font-medium text-[#21212c]">
+					<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm  text-foreground">
 						{category}
 					</p>
-					<h2 className="text-lg font-semibold md:text-xl">
+
+					<h2 className="text-lg text-card-foreground font-semibold md:text-xl">
 						{title}
 					</h2>
-					<p className="line-clamp-3 text-sm text-[#73738c] md:text-base">
+					<p className="line-clamp-3 text-sm text-muted-foreground md:text-base">
 						{description}
 					</p>
 					<div className="blog-tags flex gap-2">
 						{tags.map((tag) => (
 							<p
 								key={tag}
-								className="rounded-full border border-[#e8dede] px-2 text-sm"
+								className="rounded-full border border-border text-foreground px-2 text-sm"
 							>
-								#{tag}
+								# {tag}
 							</p>
 						))}
 					</div>
@@ -225,22 +228,25 @@ function BlogCard({
 							<div className="author-image h-10 w-10 rounded-full bg-blue-100"></div>
 						)}
 						<div>
-							<p className="font-medium">{author.name}</p>
-							<p className="text-sm text-[#73738c]">
+							<p className="font-medium text-card-foreground">
+								{author.name}
+							</p>
+							<p className="text-sm text-muted-foreground">
 								{author.role}
 							</p>
 						</div>
 					</div>
 
-					<div className="grid grid-cols-[5rem_5rem_1fr_5rem] justify-end gap-3 text-xs text-[#73738c]">
+					<div className="grid grid-cols-[5rem_5rem_1fr_5rem] justify-end gap-3 text-xs text-muted-foreground">
 						<p className="inline-flex items-center gap-1">
 							<Calendar size={10} /> {date}
 						</p>
 						<p className="inline-flex items-center gap-1">
-							<Clock size={10} color="#73738c" /> {readTime}
+							<Clock size={10} className="text-inherit" />{' '}
+							{readTime}
 						</p>
 						<p className="col-start-4 inline-flex items-center justify-end gap-1">
-							<Eye size={12} color="#73738c" /> {views}
+							<Eye size={12} className="text-inherit" /> {views}
 						</p>
 					</div>
 				</div>
@@ -251,20 +257,21 @@ function BlogCard({
 
 function BlogSubscribe() {
 	return (
-		<div className="subscribe w-full rounded-lg border border-slate-200 px-6 py-8">
-			<h3 className="inline-flex items-center gap-3 text-lg font-medium md:text-xl">
-				<Star size="1.1em" color="#7c3bed" /> Subscribe to Newsletter
+		<div className="subscribe h-fit bg-card w-full rounded-lg border border-border px-6 py-8">
+			<h3 className="inline-flex text-card-foreground items-center gap-3 text-lg font-medium md:text-xl">
+				<Star size="1.1em" className="text-primary" /> Subscribe to
+				Newsletter
 			</h3>
-			<p className="mt-2 py-px text-base text-[#73738c] md:text-lg">
+			<p className="mt-2 py-px text-base text-muted-foreground md:text-lg">
 				Get the latest articles delivered directly to your inbox.
 			</p>
 			<form action="" className="mt-6 flex flex-col gap-4">
 				<input
 					placeholder="Enter your email"
-					className="rounded-lg border border-slate-300 bg-purple-50 px-4 py-2 text-base focus:ring focus:ring-[#7c3bed] focus:ring-offset-2 focus:outline-none md:py-3 md:text-lg"
+					className="rounded-md border border-slate-300 bg-purple-50 px-4 py-[7px] text-base focus:ring focus:ring-primary focus:ring-offset-2 focus:outline-none md:py-2 md:text-lg"
 					type="text"
 				/>
-				<button className="rounded-lg bg-[#7c3bed] px-4 py-2 text-center text-base font-medium text-white md:py-3 md:text-lg">
+				<button className="rounded-md bg-primary px-4 py-[7px] text-center text-base font-medium text-white md:py-2 md:text-lg">
 					Subscribe
 				</button>
 			</form>
@@ -274,21 +281,25 @@ function BlogSubscribe() {
 
 function BlogRecentPosts({ posts = [] }) {
 	return (
-		<div className="recent-blog w-full rounded-lg border border-slate-200 px-6 py-8">
-			<h3 className="inline-flex items-center gap-3 text-lg font-medium md:text-xl">
-				<Clock size="1.1em" color="#7c3bee" /> Recent Posts
+		<div className="recent-blog bg-card w-full rounded-lg border border-border px-6 py-8">
+			<h3 className="inline-flex text-foreground items-center gap-3 text-lg font-medium md:text-xl">
+				<Clock size="1.1em" className="text-primary" /> Recent Posts
 			</h3>
 
-			<div className="recent-blog-wrapper divide-y divide-slate-300">
+			<div className="recent-blog-wrapper divide-y divide-border">
 				{posts.map(({ id, title, date, readTime }) => (
 					<div key={id} className="py-2">
-						<h4 className="text-sm font-medium">{title}</h4>
-						<div className="mt-2 flex gap-3 text-xs text-[#73738c]">
-							<p className="inline-flex items-center gap-1 border-r border-slate-200">
-								<Calendar size={10} /> {date}
+						<h4 className="text-sm font-medium text-foreground">
+							{title}
+						</h4>
+						<div className="mt-2 flex gap-3 text-xs text-muted-foreground">
+							<p className="inline-flex items-center gap-1 border-r border-border">
+								<Calendar className="text-inherit" size={10} />
+								{date}
 							</p>
 							<p className="inline-flex items-center gap-1">
-								<Clock size={10} color="#73738c" /> {readTime}
+								<Clock size={10} className="text-inherit" />
+								{readTime}
 							</p>
 						</div>
 					</div>

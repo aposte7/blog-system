@@ -118,6 +118,9 @@
 
 	--sidebar-ring: 217.2 91.2% 59.8%;
 
+	--card: 250 100% 100%;
+	--card-foreground: 240 15% 9%;
+
 	--blog-gradient: linear-gradient(
 		135deg,
 		hsl(262 83% 58%),
@@ -164,6 +167,9 @@
 
 	--destructive: 0 62.8% 30.6%;
 	--destructive-foreground: 210 40% 98%;
+
+	--card: 240 15% 9%;
+	--card-foreground: 250 100% 98%;
 
 	--border: 217.2 32.6% 17.5%;
 	--input: 217.2 32.6% 17.5%;
