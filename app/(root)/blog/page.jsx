@@ -3,8 +3,9 @@ import Image from 'next/image'
 import { Calendar, Clock, Eye, Star, TrendingUp } from 'lucide-react'
 import BlogHeader from '@/components/blog/BlogHeader'
 import { blogPosts, getFeaturedPosts } from '@/data'
+import Link from 'next/link'
 
-export default function BlogHome() {
+const BlogHome = () => {
 	const recentPosts = [
 		{
 			id: 1,
@@ -30,9 +31,9 @@ export default function BlogHome() {
 		<>
 			<BlogHeader />
 
-			<main>
-				<div className="grid grid-cols-1 gap-5 space-y-8 bg-muted px-4 py-24 min-[1135px]:grid-cols-[1fr_minmax(17rem,20rem)] xl:gap-12 xl:px-10">
-					<section className="featured-blogs order-2 space-y-8 min-[1135px]:order-none">
+			<main className="bg-muted/20">
+				<div className="grid grid-cols-1 gap-5 space-y-8  px-4 py-24 lg:grid-cols-[1fr_minmax(17rem,20rem)] xl:gap-12 xl:px-10">
+					<section className="featured-blogs order-2 space-y-8 lg:order-none">
 						<div className="featured-text-wrapper">
 							<h2 className="flex items-center justify-center gap-4 text-center text-3xl font-medium sm:text-4xl sm:font-semibold">
 								<TrendingUp
@@ -57,13 +58,13 @@ export default function BlogHome() {
 						</div>
 					</section>
 
-					<aside className="side-content order-1 flex h-fit min-w-[17rem] flex-row justify-between gap-5 min-[1135px]:sticky min-[1135px]:top-5 min-[1135px]:order-none min-[1135px]:flex-col">
+					<BlogSideBar>
 						<BlogSubscribe />
 						<BlogRecentPosts posts={recentPosts} />
-					</aside>
+					</BlogSideBar>
 				</div>
 
-				<section className="latest-blogs space-y-12 px-4 py-24 lg:px-8">
+				<section className="latest-blogs space-y-12 px-4 py-24 lg:px-14">
 					<div className="featured-text-wrapper">
 						<h2 className="flex items-center justify-center gap-4 text-center text-3xl font-medium sm:text-4xl sm:font-semibold">
 							Latest Articles
@@ -86,7 +87,16 @@ export default function BlogHome() {
 	)
 }
 
-function BlogCard({
+const BlogSideBar = ({ children, className }) => {
+	return (
+		<aside
+			className={`side-content order-1 flex h-fit min-w-[17rem] flex-col md:flex-row justify-between gap-5 lg:sticky lg:top-20 lg:order-none lg:flex-col ${className}`}
+		>
+			{children}
+		</aside>
+	)
+}
+const BlogCard = ({
 	category,
 	title,
 	excerpt,
@@ -96,93 +106,94 @@ function BlogCard({
 	readTime,
 	views,
 	image,
-}) {
+	id,
+}) => {
 	return (
-		<div className="card h-fit bg-card min-w-[23rem] overflow-hidden rounded-xl border border-border">
-			{/* Blog Image */}
-			<div className="card-image-wrapper mb-5 h-[17rem] w-full">
-				<Image
-					className="w-full h-full object-cover"
-					width={400}
-					height={400}
-					src={image}
-					alt={title}
-				/>
-			</div>
-
-			{/* Blog Content */}
-			<div className="card-text divide-y divide-border px-6 pb-7 sm:px-8">
-				<div className="space-y-3 py-4">
-					<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm text-foreground">
-						{category}
-					</p>
-
-					<h2 className="text-lg text-card-foreground font-semibold md:text-xl">
-						{title}
-					</h2>
-
-					<p className="line-clamp-3 text-sm text-muted-foreground md:text-base">
-						{excerpt}
-					</p>
-
-					<div className="blog-tags flex flex-wrap gap-2">
-						{tags.map((tag) => (
-							<p
-								key={tag}
-								className="rounded-full border border-border text-foreground px-2 text-sm"
-							>
-								# {tag}
-							</p>
-						))}
-					</div>
+		<Link href={`/blog/${id}`}>
+			<div className="card  group cursor-pointer transition-all duration-300 hover:shadow-blog-hover shadow-blog hover:-translate-y-1 h-fit bg-card min-w-[23rem] overflow-hidden rounded-xl border border-border">
+				<div className="card-image-wrapper mb-5 h-[14rem] w-full">
+					<Image
+						className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+						width={400}
+						height={400}
+						src={image}
+						alt={title}
+					/>
 				</div>
 
-				{/* Author Info */}
-				<div className="blog-info">
-					<div className="blog-author flex items-center gap-3 py-3">
-						<Image
-							src={author.avatar}
-							alt={author.name}
-							width={40}
-							height={40}
-							className="rounded-full h-10 w-10 object-top object-cover"
-						/>
-						<div>
-							<p className="font-medium text-card-foreground">
-								{author.name}
-							</p>
-							<p className="text-sm text-muted-foreground">
-								{author.role}
-							</p>
+				<div className="card-text divide-y divide-border px-6 pb-7 sm:px-8">
+					<div className="space-y-3 py-4">
+						<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm text-foreground">
+							{category}
+						</p>
+
+						<h2 className="text-lg transition-colors duration-300 group-hover:text-primary text-card-foreground font-semibold md:text-xl">
+							{title}
+						</h2>
+
+						<p className="line-clamp-3 text-sm text-muted-foreground md:text-[15px]">
+							{excerpt}
+						</p>
+
+						<div className="blog-tags flex flex-wrap gap-2">
+							{tags.map((tag) => (
+								<p
+									key={tag}
+									className="rounded-full border border-border text-foreground px-2 text-sm"
+								>
+									# {tag}
+								</p>
+							))}
 						</div>
 					</div>
 
-					{/* Blog Meta */}
-					<div className="grid grid-cols-[5rem_5rem_1fr_5rem] justify-end gap-3 text-xs text-muted-foreground">
-						<p className="inline-flex items-center gap-1">
-							<Calendar size={10} /> {publishedAt}
-						</p>
-						<p className="inline-flex items-center gap-1">
-							<Clock size={10} /> {readTime}
-						</p>
-						<p className="col-start-4 inline-flex items-center justify-end gap-1">
-							<Eye size={12} /> {views}
-						</p>
+					{/* Author Info */}
+					<div className="blog-info">
+						<div className="blog-author flex items-center gap-3 py-3">
+							<Image
+								src={author.avatar}
+								alt={author.name}
+								width={40}
+								height={40}
+								className="rounded-full h-10 w-10 object-top object-cover"
+							/>
+							<div>
+								<p className="font-medium text-card-foreground">
+									{author.name}
+								</p>
+								<p className="text-sm text-muted-foreground">
+									{author.role}
+								</p>
+							</div>
+						</div>
+
+						{/* Blog Meta */}
+						<div className="grid grid-cols-[5rem_5rem_1fr_5rem] justify-end gap-3 text-xs text-muted-foreground">
+							<p className="inline-flex items-center gap-1">
+								<Calendar size={10} /> {publishedAt}
+							</p>
+							<p className="inline-flex items-center gap-1">
+								<Clock size={10} /> {readTime}
+							</p>
+							<p className="col-start-4 inline-flex items-center justify-end gap-1">
+								<Eye size={12} /> {views}
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</Link>
 	)
 }
 
-function BlogSubscribe() {
+const BlogSubscribe = () => {
 	return (
 		<div className="subscribe h-fit bg-card w-full rounded-lg border border-border px-6 py-8">
 			<h3 className="inline-flex text-card-foreground items-center gap-3 text-lg font-medium md:text-xl">
 				<Star size="1.1em" className="text-primary" /> Subscribe to
 				Newsletter
 			</h3>
-			<p className="mt-2 py-px text-base text-muted-foreground md:text-lg">
+			<p className="mt-2 py-px text-sm text-muted-foreground md:text-base">
 				Get the latest articles delivered directly to your inbox.
 			</p>
 			<form action="" className="mt-6 flex flex-col gap-4">
@@ -199,7 +210,7 @@ function BlogSubscribe() {
 	)
 }
 
-function BlogRecentPosts({ posts = [] }) {
+const BlogRecentPosts = ({ posts = [] }) => {
 	return (
 		<div className="recent-blog bg-card w-full rounded-lg border border-border px-6 py-8">
 			<h3 className="inline-flex text-foreground items-center gap-3 text-lg font-medium md:text-xl">
@@ -228,3 +239,7 @@ function BlogRecentPosts({ posts = [] }) {
 		</div>
 	)
 }
+
+export default BlogHome
+
+export { BlogCard, BlogHeader, BlogRecentPosts, BlogSideBar, BlogSubscribe }

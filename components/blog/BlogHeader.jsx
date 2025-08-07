@@ -99,7 +99,7 @@ export default BlogHeader
 const BlogHero = ({ children, className }) => {
 	return (
 		<div
-			className={`hero mt-10 grid items-center gap-8 px-5 pt-36 pb-24 lg:grid-cols-2 lg:px-10 xl:px-20 ${className}`}
+			className={`hero  grid items-center gap-8 px-5 pt-36 pb-24 lg:grid-cols-2 lg:px-10 xl:px-20 ${className}`}
 		>
 			{children}
 		</div>

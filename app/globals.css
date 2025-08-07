@@ -49,10 +49,12 @@
 	--color-sidebar-border: hsl(var(--sidebar-border));
 	--color-sidebar-ring: hsl(var(--sidebar-ring));
 
+	--transition-blog-transition: var(--blog-transition);
+
 	--background-image-blog-gradient: var(--blog-gradient);
 	--background-image-blog-gradient-subtle: var(--blog-gradient-subtle);
-	--color--blog-shadow: var(--blog-shadow);
-	--color--blog-shadow-hover: var(--blog-shadow-hover);
+	--shadow-blog: var(--blog-shadow);
+	--shadow-blog-hover: var(--blog-shadow-hover);
 
 	--radius: var(--radius);
 }
@@ -96,7 +98,7 @@
 	--destructive: 0 84.2% 60.2%;
 	--destructive-foreground: 210 40% 98%;
 
-	--border: 214.3 31.8% 91.4%;
+	--border: 214.3 31.8% 90.4%;
 	--input: 214.3 31.8% 91.4%;
 	--ring: 222.2 84% 4.9%;
 
@@ -121,6 +123,9 @@
 	--card: 250 100% 100%;
 	--card-foreground: 240 15% 9%;
 
+	--blog-shadow: 0 4px 20px -2px hsl(262 83% 58% / 0.1);
+	--blog-shadow-hover: 0 8px 40px -4px hsl(262 83% 58% / 0.2);
+	--blog-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	--blog-gradient: linear-gradient(
 		135deg,
 		hsl(262 83% 58%),
@@ -183,6 +188,8 @@
 	--sidebar-border: 240 3.7% 15.9%;
 	--sidebar-ring: 217.2 91.2% 59.8%;
 
+	--blog-shadow: 0 4px 20px -2px hsl(272 91% 68% / 0.15);
+	--blog-shadow-hover: 0 8px 40px -4px hsl(272 91% 68% / 0.25);
 	--blog-gradient: linear-gradient(
 		135deg,
 		hsl(272 91% 68%),
