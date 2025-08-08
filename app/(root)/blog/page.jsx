@@ -4,6 +4,15 @@ import { Calendar, Clock, Eye, Star, TrendingUp } from 'lucide-react'
 import BlogHeader from '@/components/blog/BlogHeader'
 import { blogPosts, getFeaturedPosts } from '@/data'
 import Link from 'next/link'
+import BlogCard, {
+	BlogCardAuthor,
+	BlogCardBody,
+	BlogCardBodyWrapper,
+	BlogCardExcerpt,
+	BlogCardMeta,
+	BlogCardTags,
+	BlogCardTitle,
+} from '@/components/blog/BlogCard'
 
 const BlogHome = () => {
 	const recentPosts = [
@@ -53,7 +62,76 @@ const BlogHome = () => {
 
 						<div className="card-container flex flex-col justify-evenly gap-8 pt-8 min-[50rem]:flex-row lg:gap-12">
 							{getFeaturedPosts().map((article, i) => (
-								<BlogCard key={i} {...article} />
+								// <BlogCard key={i} {...article} />
+
+								<Link
+									key={article.id}
+									href={`/blog/${article.id}`}
+								>
+									<BlogCard>
+										<Image
+											src="/600x400.svg"
+											alt="Blog image"
+											className=" object-cover w-full h-[14rem] transition-transform duration-500 group-hover:scale-105"
+											width={400}
+											height={200}
+										/>
+
+										<BlogCardBodyWrapper>
+											<BlogCardBody>
+												<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm text-foreground">
+													{article.category}
+												</p>
+
+												<BlogCardTitle
+													title={article.title}
+												/>
+
+												<BlogCardExcerpt
+													excerpt={article.excerpt}
+												/>
+
+												<BlogCardTags
+													tags={article.tags}
+												/>
+											</BlogCardBody>
+
+											{/* Author */}
+											<BlogCardAuthor>
+												<Image
+													src={
+														article.author.avatar ||
+														'/600x400.svg'
+													}
+													alt={article.author.name}
+													width={40}
+													height={40}
+													className="rounded-full h-10 w-10 object-top object-cover"
+												/>
+												<div>
+													<p className="font-medium text-card-foreground">
+														{article.author.name}
+													</p>
+													<p className="text-sm text-muted-foreground">
+														{article.author.role}
+													</p>
+												</div>
+											</BlogCardAuthor>
+
+											<BlogCardMeta>
+												<p className="inline-flex items-center gap-1">
+													<Calendar size={10} /> Aug 8
+												</p>
+												<p className="inline-flex items-center gap-1">
+													<Clock size={10} /> 5 min
+												</p>
+												<p className="col-start-4 inline-flex items-center justify-end gap-1">
+													<Eye size={12} /> 325
+												</p>
+											</BlogCardMeta>
+										</BlogCardBodyWrapper>
+									</BlogCard>
+								</Link>
 							))}
 						</div>
 					</section>
@@ -78,7 +156,69 @@ const BlogHome = () => {
 
 					<div className="card-container grid grid-cols-[minmax(22rem,30rem)] justify-evenly gap-8 min-[50rem]:grid-cols-[minmax(22rem,30rem)_minmax(22rem,30rem)] xl:grid-cols-3">
 						{blogPosts.map((article, i) => (
-							<BlogCard key={i} {...article} />
+							<Link key={article.id} href={`/blog/${article.id}`}>
+								<BlogCard>
+									<Image
+										src="/600x400.svg"
+										alt="Blog image"
+										className=" object-cover w-full h-[14rem] transition-transform duration-500 group-hover:scale-105"
+										width={400}
+										height={200}
+									/>
+
+									<BlogCardBodyWrapper>
+										<BlogCardBody>
+											<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm text-foreground">
+												{article.category}
+											</p>
+
+											<BlogCardTitle
+												title={article.title}
+											/>
+
+											<BlogCardExcerpt
+												excerpt={article.excerpt}
+											/>
+
+											<BlogCardTags tags={article.tags} />
+										</BlogCardBody>
+
+										{/* Author */}
+										<BlogCardAuthor>
+											<Image
+												src={
+													article.author.avatar ||
+													'/600x400.svg'
+												}
+												alt={article.author.name}
+												width={40}
+												height={40}
+												className="rounded-full h-10 w-10 object-top object-cover"
+											/>
+											<div>
+												<p className="font-medium text-card-foreground">
+													{article.author.name}
+												</p>
+												<p className="text-sm text-muted-foreground">
+													{article.author.role}
+												</p>
+											</div>
+										</BlogCardAuthor>
+
+										<BlogCardMeta>
+											<p className="inline-flex items-center gap-1">
+												<Calendar size={10} /> Aug 8
+											</p>
+											<p className="inline-flex items-center gap-1">
+												<Clock size={10} /> 5 min
+											</p>
+											<p className="col-start-4 inline-flex items-center justify-end gap-1">
+												<Eye size={12} /> 325
+											</p>
+										</BlogCardMeta>
+									</BlogCardBodyWrapper>
+								</BlogCard>
+							</Link>
 						))}
 					</div>
 				</section>
@@ -94,95 +234,6 @@ const BlogSideBar = ({ children, className }) => {
 		>
 			{children}
 		</aside>
-	)
-}
-const BlogCard = ({
-	category,
-	title,
-	excerpt,
-	tags = [],
-	author = {},
-	publishedAt,
-	readTime,
-	views,
-	image,
-	id,
-}) => {
-	return (
-		<Link href={`/blog/${id}`}>
-			<div className="card  group cursor-pointer transition-all duration-300 hover:shadow-blog-hover shadow-blog hover:-translate-y-1 h-fit bg-card min-w-[23rem] overflow-hidden rounded-xl border border-border">
-				<div className="card-image-wrapper mb-5 h-[14rem] w-full">
-					<Image
-						className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-						width={400}
-						height={400}
-						src={image}
-						alt={title}
-					/>
-				</div>
-
-				<div className="card-text divide-y divide-border px-6 pb-7 sm:px-8">
-					<div className="space-y-3 py-4">
-						<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm text-foreground">
-							{category}
-						</p>
-
-						<h2 className="text-lg transition-colors duration-300 group-hover:text-primary text-card-foreground font-semibold md:text-xl">
-							{title}
-						</h2>
-
-						<p className="line-clamp-3 text-sm text-muted-foreground md:text-[15px]">
-							{excerpt}
-						</p>
-
-						<div className="blog-tags flex flex-wrap gap-2">
-							{tags.map((tag) => (
-								<p
-									key={tag}
-									className="rounded-full border border-border text-foreground px-2 text-sm"
-								>
-									# {tag}
-								</p>
-							))}
-						</div>
-					</div>
-
-					{/* Author Info */}
-					<div className="blog-info">
-						<div className="blog-author flex items-center gap-3 py-3">
-							<Image
-								src={author.avatar}
-								alt={author.name}
-								width={40}
-								height={40}
-								className="rounded-full h-10 w-10 object-top object-cover"
-							/>
-							<div>
-								<p className="font-medium text-card-foreground">
-									{author.name}
-								</p>
-								<p className="text-sm text-muted-foreground">
-									{author.role}
-								</p>
-							</div>
-						</div>
-
-						{/* Blog Meta */}
-						<div className="grid grid-cols-[5rem_5rem_1fr_5rem] justify-end gap-3 text-xs text-muted-foreground">
-							<p className="inline-flex items-center gap-1">
-								<Calendar size={10} /> {publishedAt}
-							</p>
-							<p className="inline-flex items-center gap-1">
-								<Clock size={10} /> {readTime}
-							</p>
-							<p className="col-start-4 inline-flex items-center justify-end gap-1">
-								<Eye size={12} /> {views}
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</Link>
 	)
 }
 
@@ -242,4 +293,4 @@ const BlogRecentPosts = ({ posts = [] }) => {
 
 export default BlogHome
 
-export { BlogCard, BlogHeader, BlogRecentPosts, BlogSideBar, BlogSubscribe }
+export { BlogHeader, BlogRecentPosts, BlogSideBar, BlogSubscribe }

@@ -14,8 +14,17 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { BlogCard, BlogRecentPosts, BlogSideBar, BlogSubscribe } from '../page'
+import { BlogRecentPosts, BlogSideBar, BlogSubscribe } from '../page'
 import React, { useState } from 'react'
+import BlogCard, {
+	BlogCardAuthor,
+	BlogCardBody,
+	BlogCardBodyWrapper,
+	BlogCardExcerpt,
+	BlogCardMeta,
+	BlogCardTags,
+	BlogCardTitle,
+} from '@/components/blog/BlogCard'
 
 function page({ params }) {
 	const { blogId: id } = React.use(params)
@@ -77,7 +86,7 @@ function page({ params }) {
 		setComments([newComment, ...comments])
 	}
 	return (
-		<div className="min-h-screen  bg-background">
+		<div className="min-h-screen bg-background">
 			<main>
 				<div className="px-10 lg:px-20 py-8">
 					<div className="grid lg:grid-cols-[1fr_320px] justify-between gap-12">
@@ -208,11 +217,105 @@ function page({ params }) {
 									</h2>
 									<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
 										{relatedPosts.map((relatedPost) => (
-											<BlogCard
+											<Link
 												key={relatedPost.id}
-												{...relatedPost}
-												id={relatedPost.id}
-											/>
+												href={`/blog/${relatedPost.id}`}
+											>
+												<BlogCard>
+													<Image
+														src="/600x400.svg"
+														alt="Blog image"
+														width={400}
+														height={200}
+														className=" object-cover w-full h-[14rem] transition-transform duration-500 group-hover:scale-105"
+													/>
+
+													<BlogCardBodyWrapper>
+														<BlogCardBody>
+															<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm text-foreground">
+																{
+																	relatedPost.category
+																}
+															</p>
+
+															<BlogCardTitle
+																title={
+																	relatedPost.title
+																}
+															/>
+
+															<BlogCardExcerpt
+																excerpt={
+																	relatedPost.excerpt
+																}
+															/>
+
+															<BlogCardTags
+																tags={
+																	relatedPost.tags
+																}
+															/>
+														</BlogCardBody>
+
+														{/* Author */}
+														<BlogCardAuthor>
+															<Image
+																src={
+																	relatedPost
+																		.author
+																		.avatar ||
+																	'/600x400.svg'
+																}
+																alt={
+																	relatedPost
+																		.author
+																		.name
+																}
+																width={40}
+																height={40}
+																className="rounded-full h-10 w-10 object-top object-cover"
+															/>
+															<div>
+																<p className="font-medium text-card-foreground">
+																	{
+																		relatedPost
+																			.author
+																			.name
+																	}
+																</p>
+																<p className="text-sm text-muted-foreground">
+																	{
+																		relatedPost
+																			.author
+																			.role
+																	}
+																</p>
+															</div>
+														</BlogCardAuthor>
+
+														<BlogCardMeta>
+															<p className="inline-flex items-center gap-1">
+																<Calendar
+																	size={10}
+																/>{' '}
+																Aug 8
+															</p>
+															<p className="inline-flex items-center gap-1">
+																<Clock
+																	size={10}
+																/>{' '}
+																5 min
+															</p>
+															<p className="col-start-4 inline-flex items-center justify-end gap-1">
+																<Eye
+																	size={12}
+																/>{' '}
+																325
+															</p>
+														</BlogCardMeta>
+													</BlogCardBodyWrapper>
+												</BlogCard>
+											</Link>
 										))}
 									</div>
 								</section>
