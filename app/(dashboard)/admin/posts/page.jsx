@@ -1,4 +1,6 @@
+import CreatePost from '@/components/blog/CreatePost'
 import InputField from '@/components/InputField'
+import Modal from '@/components/Modal'
 import TableWrapper, {
 	Table,
 	TableContainer,
@@ -31,15 +33,22 @@ const Page = () => {
 				<p className="text-muted-foreground">
 					Manage your blog posts and articles
 				</p>
+				<Modal>
+					<Modal.Open name="create-blog">
+						<button className="col-start-2 row-start-1 inline-flex items-center gap-3 rounded-sm bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground">
+							<Plus
+								strokeWidth={2.5}
+								className="text-inherit"
+								size="1.2em"
+							/>
+							New Post
+						</button>
+					</Modal.Open>
 
-				<button className="col-start-2 row-start-1 inline-flex items-center gap-3 rounded-sm bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground">
-					<Plus
-						strokeWidth={2.5}
-						className="text-inherit"
-						size="1.2em"
-					/>
-					New Post
-				</button>
+					<Modal.View name="create-blog">
+						<CreatePost />
+					</Modal.View>
+				</Modal>
 			</div>
 
 			<div className="mt-2 flex-1 space-y-4 rounded-md border border-border bg-card p-6">
