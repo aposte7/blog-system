@@ -8,6 +8,7 @@ import {
 	UserPlus,
 } from 'lucide-react'
 import Image from 'next/image'
+import { DashboardChart } from './DashboardChart'
 
 const recentPosts = [
 	{
@@ -100,6 +101,8 @@ const Home = () => {
 					</div>
 				</div>
 			</div>
+
+			<DashboardChart />
 
 			<div className="rounded-xl border border-border bg-card shadow-sm">
 				<div className=" p-4">
