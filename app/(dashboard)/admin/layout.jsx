@@ -85,7 +85,7 @@ const Layout = ({ children }) => {
 				</div>
 			</aside>
 
-			<div className="overflow-y-scroll relative bg-blue-100">
+			<div className="overflow-y-scroll relative bg-blue-100/80">
 				<div className="flex z-50 sticky top-0 justify-between border-b border-b-slate-300 bg-white px-4 py-3">
 					<div className="flex items-center gap-4">
 						<PanelLeft className="text-slate-500" />
@@ -111,7 +111,7 @@ const Layout = ({ children }) => {
 						</div>
 					</div>
 				</div>
-				<div>{children}</div>
+				<div className="h-[91dvh]">{children}</div>
 			</div>
 		</main>
 	)

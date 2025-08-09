@@ -1,3 +1,6 @@
+import { cn } from '@/lib/utils'
+import { createElement } from 'react'
+
 function TableWrapper({ children, className = '' }) {
 	return (
 		<div
@@ -14,21 +17,21 @@ const Table = ({ children, className = '' }) => {
 	)
 }
 
-const TableContainer = ({ elm = 'thead', children, className = '' }) => {
+const TableContainer = ({ elm = 'thead', children, style = '' }) => {
 	const baseClasses = `[&_tr]:border-b ${
 		!elm == 'thead' && '[&_tr:last-child]:border-0'
 	}`
-	return React.createElement(
-		elm,
-		{ className: `${baseClasses} ${className}` },
-		children
-	)
+
+	return createElement(elm, { className: cn(baseClasses, style) }, children)
 }
 
 const TableRow = ({ children, className = '' }) => {
 	return (
 		<tr
-			className={`border-b-slate-300 transition-colors hover:bg-slate-100 has-[th]:bg-indigo-50 ${className}`}
+			className={cn(
+				'border-b-border transition-colors hover:bg-muted has-[th]:bg-primary/5  ',
+				className
+			)}
 		>
 			{children}
 		</tr>
@@ -40,7 +43,7 @@ const TableData = ({ elm = 'td', children, className = '' }) => {
 		elm === 'td'
 			? 'p-3 align-middle'
 			: 'h-12 px-4 text-left align-middle font-medium text-slate-600'
-	return React.createElement(
+	return createElement(
 		elm,
 		{ className: `${baseClass} ${className}` },
 		children
