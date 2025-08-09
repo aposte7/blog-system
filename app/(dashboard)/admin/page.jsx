@@ -1,5 +1,7 @@
+import Home from '@/components/admin/Home'
+
 const Page = () => {
-	return <div>DashBoard</div>
+	return <Home />
 }
 
 export default Page
