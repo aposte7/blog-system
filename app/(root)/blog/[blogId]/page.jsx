@@ -25,6 +25,8 @@ import BlogCard, {
 	BlogCardTags,
 	BlogCardTitle,
 } from '@/components/blog/BlogCard'
+import CommentForm from '@/components/comment/CommentForm'
+import Comment from '@/components/comment/Comment'
 
 function page({ params }) {
 	const { blogId: id } = React.use(params)
@@ -221,13 +223,13 @@ function page({ params }) {
 												key={relatedPost.id}
 												href={`/blog/${relatedPost.id}`}
 											>
-												<BlogCard>
+												<BlogCard className="">
 													<Image
 														src="/600x400.svg"
 														alt="Blog image"
 														width={400}
 														height={200}
-														className=" object-cover w-full h-[14rem] transition-transform duration-500 group-hover:scale-105"
+														className=" object-cover w-full h-[11rem] transition-transform duration-500 group-hover:scale-105"
 													/>
 
 													<BlogCardBodyWrapper>
@@ -242,6 +244,7 @@ function page({ params }) {
 																title={
 																	relatedPost.title
 																}
+																className="md:text-base"
 															/>
 
 															<BlogCardExcerpt
@@ -249,49 +252,7 @@ function page({ params }) {
 																	relatedPost.excerpt
 																}
 															/>
-
-															<BlogCardTags
-																tags={
-																	relatedPost.tags
-																}
-															/>
 														</BlogCardBody>
-
-														{/* Author */}
-														<BlogCardAuthor>
-															<Image
-																src={
-																	relatedPost
-																		.author
-																		.avatar ||
-																	'/600x400.svg'
-																}
-																alt={
-																	relatedPost
-																		.author
-																		.name
-																}
-																width={40}
-																height={40}
-																className="rounded-full h-10 w-10 object-top object-cover"
-															/>
-															<div>
-																<p className="font-medium text-card-foreground">
-																	{
-																		relatedPost
-																			.author
-																			.name
-																	}
-																</p>
-																<p className="text-sm text-muted-foreground">
-																	{
-																		relatedPost
-																			.author
-																			.role
-																	}
-																</p>
-															</div>
-														</BlogCardAuthor>
 
 														<BlogCardMeta>
 															<p className="inline-flex items-center gap-1">
@@ -323,8 +284,9 @@ function page({ params }) {
 							{/* Comments Section */}
 							<section className="space-y-8">
 								<hr />
-								{/* <CommentsList comments={comments} /> */}
-								{/* <CommentForm onSubmit={handleCommentSubmit} /> */}
+
+								<CommentForm />
+								<Comment />
 							</section>
 							<div className="flex items-center justify-between mt-8">
 								<button

@@ -2,6 +2,7 @@ import React from 'react'
 import { ArrowRight, BookOpen, ChartLine, Users } from 'lucide-react'
 import NavBar from '../NavBar'
 import Image from 'next/image'
+import { cn } from '@/lib/utils'
 
 const BlogHeader = () => {
 	return (
@@ -99,7 +100,10 @@ export default BlogHeader
 const BlogHero = ({ children, className }) => {
 	return (
 		<div
-			className={`hero  grid items-center gap-8 px-5 pt-36 pb-24 lg:grid-cols-2 lg:px-10 xl:px-20 ${className}`}
+			className={cn(
+				'hero grid items-center gap-8 px-5 pt-36 pb-24 lg:grid-cols-2 lg:px-10 xl:px-20',
+				className
+			)}
 		>
 			{children}
 		</div>
@@ -107,13 +111,18 @@ const BlogHero = ({ children, className }) => {
 }
 
 const BlogHeroText = ({ children, className }) => {
-	return <div className={`hero-text space-y-8 ${className}`}>{children}</div>
+	return (
+		<div className={cn('hero-text space-y-8', className)}>{children}</div>
+	)
 }
 
 const BlogHeroImage = ({ children, className }) => {
 	return (
 		<div
-			className={`hero-image h-[32rem] overflow-hidden rounded-lg bg-amber-500 ${className}`}
+			className={cn(
+				'hero-image h-[32rem] overflow-hidden rounded-lg bg-amber-500',
+				className
+			)}
 		>
 			{children}
 		</div>
@@ -123,7 +132,10 @@ const BlogHeroImage = ({ children, className }) => {
 const BlogHeroTitle = ({ children, className }) => {
 	return (
 		<div
-			className={`inline-flex bg-bl rounded-full border border-primary/40 bg-primary/10 px-3 py-px text-sm font-medium text-primary lg:text-base ${className}`}
+			className={cn(
+				'inline-flex bg-bl rounded-full border border-primary/40 bg-primary/10 px-3 py-px text-sm font-medium text-primary lg:text-base',
+				className
+			)}
 		>
 			{children}
 		</div>
@@ -132,7 +144,10 @@ const BlogHeroTitle = ({ children, className }) => {
 const BlogHeroHeader = ({ children, className }) => {
 	return (
 		<h1
-			className={`text-5xl text-foreground font-bold xl:text-6xl ${className}`}
+			className={cn(
+				'text-5xl text-foreground font-bold xl:text-6xl',
+				className
+			)}
 		>
 			{children}
 		</h1>
@@ -141,7 +156,10 @@ const BlogHeroHeader = ({ children, className }) => {
 const BlogHeroDescription = ({ children, className }) => {
 	return (
 		<div
-			className={`max-w-[32rem] text-base  text-muted-foreground md:text-lg lg:text-xl ${className}`}
+			className={cn(
+				'max-w-[32rem] text-base text-muted-foreground md:text-lg lg:text-xl',
+				className
+			)}
 		>
 			{children}
 		</div>
@@ -151,7 +169,10 @@ const BlogHeroDescription = ({ children, className }) => {
 const BlogHeroStatWrapper = ({ children, className }) => {
 	return (
 		<div
-			className={`hero-stat-wrapper flex items-center gap-10 ${className}`}
+			className={cn(
+				'hero-stat-wrapper flex items-center gap-10',
+				className
+			)}
 		>
 			{children}
 		</div>
@@ -160,7 +181,10 @@ const BlogHeroStatWrapper = ({ children, className }) => {
 const BlogHeroStat = ({ children, icon, className }) => {
 	return (
 		<div
-			className={`flex items-center hero-stat gap-3 text-base md:text-lg lg:gap-5 lg:text-2xl ${className}`}
+			className={cn(
+				'flex items-center hero-stat gap-3 text-base md:text-lg lg:gap-5 lg:text-2xl',
+				className
+			)}
 		>
 			{icon}
 			{children}
@@ -170,7 +194,10 @@ const BlogHeroStat = ({ children, icon, className }) => {
 const BlogHeroButtonWrapper = ({ children, className }) => {
 	return (
 		<div
-			className={`hero-button-wrapper flex flex-col gap-10 sm:flex-row ${className}`}
+			className={cn(
+				'hero-button-wrapper flex flex-col gap-10 sm:flex-row',
+				className
+			)}
 		>
 			{children}
 		</div>
