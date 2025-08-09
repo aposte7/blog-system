@@ -1,6 +1,6 @@
 import CreatePost from '@/components/blog/CreatePost'
 import InputField from '@/components/InputField'
-import Modal from '@/components/Modal'
+import Modal, { OpenModal, ViewModal } from '@/components/Modal'
 import TableWrapper, {
 	Table,
 	TableContainer,
@@ -34,7 +34,7 @@ const Page = () => {
 					Manage your blog posts and articles
 				</p>
 				<Modal>
-					<Modal.Open name="create-blog">
+					<OpenModal name="create-blog">
 						<button className="col-start-2 row-start-1 inline-flex items-center gap-3 rounded-sm bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground">
 							<Plus
 								strokeWidth={2.5}
@@ -43,11 +43,11 @@ const Page = () => {
 							/>
 							New Post
 						</button>
-					</Modal.Open>
+					</OpenModal>
 
-					<Modal.View name="create-blog">
+					<ViewModal title="Create New Post" name="create-blog">
 						<CreatePost />
-					</Modal.View>
+					</ViewModal>
 				</Modal>
 			</div>
 
