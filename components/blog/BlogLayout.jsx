@@ -1,5 +1,6 @@
-import { LogOut, PanelLeft, Sidebar } from 'lucide-react'
+import { LogOut, PanelLeft } from 'lucide-react'
 import InputField from '../InputField'
+import Sidebar from '../Sidebar'
 
 function BlogLayout({ children }) {
 	return (

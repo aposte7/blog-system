@@ -1,7 +1,12 @@
 import BlogLayout from '@/components/blog/BlogLayout'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 const Layout = ({ children }) => {
-	return <BlogLayout>{children}</BlogLayout>
+	return (
+		<ProtectedRoute>
+			<BlogLayout>{children}</BlogLayout>
+		</ProtectedRoute>
+	)
 }
 
 export default Layout
