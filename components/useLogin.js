@@ -8,8 +8,8 @@ export function useLogin() {
 
 	const { mutate: loginApi, isLoading } = useMutation({
 		mutationFn: (data) => login(data),
-		onSuccess: (user) => {
-			queryClient.setQueriesData(['user'], user)
+		onSuccess: (data) => {
+			queryClient.setQueriesData(['user'], data.user)
 			router.push('/admin')
 		},
 		onError: (err) => {
