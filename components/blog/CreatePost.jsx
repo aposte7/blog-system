@@ -209,7 +209,7 @@ function CreatePost() {
 					<label className="mb-1 block text-sm font-medium">
 						Upload Images
 					</label>
-					<inputField
+					<input
 						type="file"
 						multiple
 						onChange={handleImageUpload}
