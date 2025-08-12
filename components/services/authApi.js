@@ -31,3 +31,17 @@ export async function getCurrentUser() {
 
 	return userData?.user || null
 }
+
+export async function getCurrentUserProfile() {
+	const user = await getCurrentUser()
+	if (!user) return null
+
+	const { data: profile, error: profileError } = await supabaseClient
+		.from('profiles')
+		.select('*')
+		.eq('id', user.id) // id matches auth.users.id
+		.single()
+
+	if (profileError) return null
+	return profile
+}

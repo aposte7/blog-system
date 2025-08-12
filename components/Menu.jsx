@@ -1,4 +1,5 @@
 'use client'
+import { cn } from '@/lib/utils'
 import { cloneElement, createContext, useContext, useState } from 'react'
 
 const MenuContext = createContext()
@@ -68,12 +69,15 @@ function MenuViews({ id, children, className = '', clickOutside = false }) {
 					onClick={() => closeMenu()}
 				/>
 			)}
-			<div className="h-0">
+			<div className={cn('h-0 z-50')}>
 				<div
 					role="menu"
 					aria-orientation="vertical"
 					aria-labelledby="menu-button"
-					className={`relative z-20 mt-0.5 rounded-md border border-gray-200 bg-white px-2 py-2 shadow-lg ${className}`}
+					className={cn(
+						'relative z-50 mt-0.5 rounded-md border border-gray-200 bg-white px-2 py-2 shadow-lg',
+						className
+					)}
 				>
 					{children}
 				</div>

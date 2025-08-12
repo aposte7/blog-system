@@ -95,12 +95,12 @@ const BlogCardExcerpt = ({ excerpt, className = '' }) => {
 const BlogCardTags = ({ tags, className = '' }) => {
 	return (
 		<div className={cn('blog-tags flex flex-wrap gap-2', className)}>
-			{tags.map((tag) => (
+			{tags.map((postTag) => (
 				<p
-					key={tag}
+					key={postTag.id}
 					className="rounded-full border border-border text-foreground px-2 text-sm"
 				>
-					# {tag}
+					{postTag.name}
 				</p>
 			))}
 		</div>
@@ -124,7 +124,7 @@ const BlogCardMeta = ({ children, className = '' }) => {
 	return (
 		<div
 			className={cn(
-				'grid mt-3 grid-cols-[4rem_4rem_1fr_5rem] justify-end gap-3 text-xs text-muted-foreground',
+				'grid mt-3 grid-cols-[auto_4rem_1fr_5rem] justify-end gap-3 text-xs text-muted-foreground',
 				className
 			)}
 		>

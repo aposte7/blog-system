@@ -1,6 +1,7 @@
 import { LogOut, PanelLeft } from 'lucide-react'
 import InputField from '../InputField'
 import Sidebar from '../Sidebar'
+import Image from 'next/image'
 
 function BlogLayout({ children }) {
 	return (
@@ -22,9 +23,11 @@ function BlogLayout({ children }) {
 					<div className="flex gap-6">
 						<div className="inline-flex items-center gap-4">
 							<p>Hiikaa </p>
-							<img
-								src="/kk"
-								alt=""
+							<Image
+								src="/600x400"
+								alt="image"
+								width={40}
+								height={40}
 								className="h-10 w-10 rounded-full bg-blue-500"
 							/>
 						</div>

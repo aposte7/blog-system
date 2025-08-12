@@ -1,110 +1,160 @@
 'use client'
 
 import { useState } from 'react'
+import { useForm, Controller } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import MDEditor from '@uiw/react-md-editor'
 import { Copy, FileText, Trash2, X } from 'lucide-react'
 import Menus from '../Menu'
-import InputField from '../InputField'
+import { useTags } from '../Tags/useTags'
+import { useCategories } from '../categories/useCategories'
+import useUploadImage from './useUploadImage'
+import { useImages } from './useImages'
+import { createPost } from '../services/postApi'
 
-const quickTags = [
-	'React',
-	'JavaScript',
-	'TypeScript',
-	'Node.js',
-	'CSS',
-	'HTML',
-	'Web Development',
-	'Frontend',
-	'Backend',
-	'Full Stack',
-	'UI/UX',
-	'Design',
-	'Performance',
-	'Testing',
-	'DevOps',
-	'Mobile',
-	'API',
-]
+// Validation schema
+const postSchema = z.object({
+	title: z.string().min(1, 'Title is required'),
+	slug: z.string().min(1, 'Slug is required'),
+	category: z.string().min(1, 'Category is required'),
+	status: z.enum(['Drafted', 'Published']),
+	publishDate: z.string().min(1, 'Publish date is required'),
+	excerpt: z.string().optional(),
+	featuredImage: z.string().url('Must be a valid URL'),
+	content: z.string().min(1, 'Content is required'),
+	tags: z.array(z.string()).optional(),
+})
 
-function CreatePost() {
-	const [md, setMd] = useState('# hello')
-	const [tags, setTags] = useState([])
-	const [inputTag, setInputTag] = useState('')
-	const [images, setImages] = useState([])
+function CreatePost({ closeModal }) {
+	const { isLoading: isLoadingTags, tags: dbTags } = useTags()
+	const { isLoading: isLoadingCategories, categories: dbCategories } =
+		useCategories()
+	const { uploadImage, isUploading } = useUploadImage()
+	const { images } = useImages()
 
-	function addTag(e) {
-		e.preventDefault()
-		if (inputTag && !tags.includes(inputTag)) {
-			setTags([...tags, inputTag])
-			setInputTag('')
-		}
-	}
+	const [selectedTags, setSelectedTags] = useState([])
+	const [selectedCategory, setSelectedCategory] = useState(null)
+
+	const {
+		register,
+		handleSubmit,
+		control,
+		setValue,
+		watch,
+		formState: { errors },
+	} = useForm({
+		resolver: zodResolver(postSchema),
+		defaultValues: {
+			title: '',
+			slug: '',
+			category: '',
+			status: 'Drafted',
+			publishDate: new Date().toISOString().split('T')[0],
+			excerpt: '',
+			featuredImage: '',
+			content: '# hello write your blog here',
+			tags: [],
+		},
+	})
+
+	const status = watch('status')
 
 	function handleImageUpload(e) {
 		const files = Array.from(e.target.files)
-		const newImages = files.map((file) => ({
-			name: file.name,
-			url: URL.createObjectURL(file),
-		}))
-		setImages((prev) => [...prev, ...newImages])
+		if (files[0]) uploadImage(files[0])
 	}
 
-	function removeImage(name) {
-		setImages(images.filter((img) => img.name !== name))
+	const onSubmit = async (data) => {
+		data.tags = selectedTags.map((tag) => tag.id)
+		data.media = images
+
+		await createPost(data)
+		console.log('Validated Post:', data)
 	}
 
 	return (
-		<div className="max-h-[85dvh] w-[94dvw] min-w-[27rem]  max-w-4xl overflow-y-scroll rounded-sm bg-white p-6 shadow-lg">
-			<form className="space-y-4 rounded-md">
-				{/* Title */}
+		<div className="max-h-[85dvh] w-[94dvw] min-w-[27rem] max-w-4xl overflow-y-scroll rounded-sm bg-white p-6 shadow-lg">
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className="space-y-4 rounded-md"
+			>
 				<div>
 					<label className="mb-1 block text-sm font-medium">
 						Title *
 					</label>
-
-					<InputField
-						id="title"
-						required={true}
+					<input
+						{...register('title')}
 						type="text"
 						placeholder="Enter post title..."
+						className="w-full rounded-md border border-gray-300 px-4 py-2"
 					/>
+					{errors.title && (
+						<p className="text-red-500 text-xs">
+							{errors.title.message}
+						</p>
+					)}
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div>
 						<label className="mb-1 block text-sm font-medium">
-							Author *
+							Slug *
 						</label>
-
-						<InputField
-							id="author"
-							required={true}
+						<input
+							{...register('slug')}
 							type="text"
-							placeholder="Enter author name..."
+							placeholder="Enter post slug..."
+							className="w-full rounded-md border border-gray-300 px-4 py-2"
 						/>
+						{errors.slug && (
+							<p className="text-red-500 text-xs">
+								{errors.slug.message}
+							</p>
+						)}
 					</div>
+
 					<div>
 						<label className="mb-1 block text-sm font-medium">
 							Category *
 						</label>
-
 						<Menus>
-							<Menus.Toggle id="open">
-								<button className="w-full rounded-sm border border-slate-200 px-4 py-2 text-start text-slate-600">
-									Select
+							<Menus.Toggle id="category">
+								<button
+									type="button"
+									className="w-full rounded-sm border border-slate-200 px-4 py-2 text-start text-slate-600"
+								>
+									{selectedCategory?.name ||
+										'Select Category'}
 								</button>
 							</Menus.Toggle>
-
-							<Menus.MenuViews className="" id="open">
-								<Menus.Button>Saved</Menus.Button>
-								<Menus.Button>Done</Menus.Button>
-								<Menus.Button>Yes</Menus.Button>
+							<Menus.MenuViews id="category">
+								{!isLoadingCategories &&
+									dbCategories.map((cat) => (
+										<Menus.Button
+											key={cat.id}
+											onClick={(e) => {
+												e.preventDefault()
+												setSelectedCategory({
+													name: cat.name,
+													id: cat.id,
+												})
+												setValue('category', cat.id)
+											}}
+										>
+											{cat.name}
+										</Menus.Button>
+									))}
 							</Menus.MenuViews>
 						</Menus>
+						{errors.category && (
+							<p className="text-red-500 text-xs">
+								{errors.category.message}
+							</p>
+						)}
 					</div>
 				</div>
 
-				{/* Status & Publish Date */}
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div>
 						<label className="mb-1 block text-sm font-medium">
@@ -112,29 +162,48 @@ function CreatePost() {
 						</label>
 						<Menus>
 							<Menus.Toggle id="status">
-								<button className="w-full rounded-sm border border-slate-200 px-4 py-2 text-start text-slate-600">
-									Drafted
+								<button
+									type="button"
+									className="w-full rounded-sm border border-slate-200 px-4 py-2 text-start text-slate-600"
+								>
+									{status}
 								</button>
 							</Menus.Toggle>
 							<Menus.MenuViews id="status">
-								<Menus.Button>Drafted</Menus.Button>
-								<Menus.Button>Published</Menus.Button>
+								{['Drafted', 'Published'].map((s) => (
+									<Menus.Button
+										key={s}
+										onClick={(e) => {
+											e.preventDefault()
+											setValue('status', s)
+										}}
+									>
+										{s}
+									</Menus.Button>
+								))}
 							</Menus.MenuViews>
 						</Menus>
+						{errors.status && (
+							<p className="text-red-500 text-xs">
+								{errors.status.message}
+							</p>
+						)}
 					</div>
 
-					<div className="">
+					<div>
 						<label className="mb-1 block text-sm font-medium">
 							Publish Date *
 						</label>
-
-						<InputField
-							defaultValue="2025-08-05"
-							id="date"
-							required={true}
+						<input
+							{...register('publishDate')}
 							type="date"
-							placeholder="Enter author name..."
+							className="w-full rounded-md border border-gray-300 px-4 py-2"
 						/>
+						{errors.publishDate && (
+							<p className="text-red-500 text-xs">
+								{errors.publishDate.message}
+							</p>
+						)}
 					</div>
 				</div>
 
@@ -142,51 +211,46 @@ function CreatePost() {
 					<label className="mb-1 block text-sm font-medium">
 						Tags
 					</label>
-					<div className="flex gap-2">
-						<InputField
-							id="tags"
-							required={true}
-							type="text"
-							value={inputTag}
-							placeholder="Type a tag and press Enter..."
-							onChange={(e) => setInputTag(e.target.value)}
-						/>
-						<button
-							onClick={addTag}
-							className="rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
-						>
-							Add
-						</button>
-					</div>
-					{/* Quick Tags */}
 					<div className="mt-3 flex flex-wrap gap-2">
-						{quickTags.map((tag) => (
-							<button
-								key={tag}
-								type="button"
-								onClick={() =>
-									!tags.includes(tag) &&
-									setTags([...tags, tag])
-								}
-								className="rounded-full border border-gray-300 px-3 py-[2px] text-xs text-gray-700 hover:bg-gray-100"
-							>
-								{tag}
-							</button>
-						))}
+						{!isLoadingTags &&
+							dbTags.map((tag) => (
+								<button
+									key={tag.id}
+									type="button"
+									onClick={() => {
+										if (
+											!selectedTags.find(
+												(t) => t.id === tag.id
+											)
+										) {
+											setSelectedTags([
+												...selectedTags,
+												{ name: tag.name, id: tag.id },
+											])
+										}
+									}}
+									className="rounded-full border border-gray-300 px-3 py-[2px] text-xs text-gray-700 hover:bg-gray-100"
+								>
+									{tag.name}
+								</button>
+							))}
 					</div>
-					{/* Selected Tags */}
 					<div className="mt-3 flex flex-wrap gap-2">
-						{tags.map((tag) => (
+						{selectedTags.map((tag) => (
 							<span
-								key={tag}
+								key={tag.id}
 								className="flex items-center gap-1 rounded-full bg-indigo-100 px-3 py-[2px] text-sm text-indigo-700"
 							>
-								{tag}
+								{tag.name}
 								<X
 									size={14}
 									className="cursor-pointer"
 									onClick={() =>
-										setTags(tags.filter((t) => t !== tag))
+										setSelectedTags(
+											selectedTags.filter(
+												(t) => t.id !== tag.id
+											)
+										)
 									}
 								/>
 							</span>
@@ -194,14 +258,14 @@ function CreatePost() {
 					</div>
 				</div>
 
-				{/* Excerpt */}
 				<div>
 					<label className="mb-1 block text-sm font-medium">
 						Excerpt
 					</label>
 					<textarea
+						{...register('excerpt')}
 						placeholder="Brief description of the post..."
-						className="min-h-[100px] w-full resize-y rounded-md border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+						className="min-h-[100px] w-full resize-y rounded-md border border-gray-300 px-4 py-2"
 					/>
 				</div>
 
@@ -210,30 +274,36 @@ function CreatePost() {
 						Upload Images
 					</label>
 					<input
+						accept="image/*"
 						type="file"
 						multiple
 						onChange={handleImageUpload}
 						className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-indigo-600 file:px-4 file:py-2 file:text-white hover:file:bg-indigo-700"
 					/>
-					{/* Selected Images Preview */}
-					{images.length > 0 && (
+					{images?.length > 0 && (
 						<div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
 							{images.map((img) => (
 								<div
-									key={img.name}
+									key={img.id}
 									className="relative flex gap-2 rounded-md border p-2"
 								>
 									<img
-										src={img.url}
-										alt={img.name}
+										src={img.image_url}
+										alt={img.alt_text}
 										className="h-16 w-16 rounded object-cover"
 									/>
 									<div className="flex-1">
-										<p className="truncate text-sm font-medium">
-											{img.name}
+										<p className="truncate w-75 text-sm font-medium">
+											{img.image_url}
 										</p>
 										<div className="mt-2 flex gap-2">
 											<button
+												onClick={async () => {
+													await navigator.clipboard.writeText(
+														img.image_url
+													)
+													alert('Image URL copied!')
+												}}
 												type="button"
 												className="rounded p-1 hover:bg-gray-100"
 											>
@@ -249,7 +319,7 @@ function CreatePost() {
 												type="button"
 												className="rounded p-1 text-red-500 hover:bg-red-100"
 												onClick={() =>
-													removeImage(img.name)
+													console.log('Remove image')
 												}
 											>
 												<Trash2 size={16} />
@@ -260,38 +330,55 @@ function CreatePost() {
 							))}
 						</div>
 					)}
-					<p className="mt-2 text-xs text-gray-500">
-						Select multiple images to use in your post content
-						(local preview only)
-					</p>
 				</div>
 
+				{/* Featured Image */}
+				<div>
+					<label className="mb-1 block text-sm font-medium">
+						Featured Image *
+					</label>
+					<input
+						{...register('featuredImage')}
+						type="text"
+						placeholder="Enter featured image URL..."
+						className="w-full rounded-md border border-gray-300 px-4 py-2"
+					/>
+					{errors.featuredImage && (
+						<p className="text-red-500 text-xs">
+							{errors.featuredImage.message}
+						</p>
+					)}
+				</div>
+
+				{/* Markdown Content */}
 				<div className="md:col-span-2">
 					<label className="mb-1 block text-sm font-medium">
-						Content * (Markdown + HTML)
+						Content *
 					</label>
-					<div className="mt-2 px-px">
-						<MDEditor
-							value={md}
-							onChange={(value) => setMd(value)}
-							height={400}
-							width="100%"
-							data-color-mode="light"
-							hideToolbar={false}
-							visibleDragbar={false}
-						/>
-					</div>
-					<p className="text-muted-foreground mt-1 text-xs">
-						Supports Markdown and HTML. Use &lt;img&gt; tags for
-						precise image sizing.
-					</p>
+					<Controller
+						name="content"
+						control={control}
+						render={({ field }) => (
+							<MDEditor
+								value={field.value}
+								onChange={(value) => field.onChange(value)}
+								height={400}
+								data-color-mode="light"
+							/>
+						)}
+					/>
+					{errors.content && (
+						<p className="text-red-500 text-xs">
+							{errors.content.message}
+						</p>
+					)}
 				</div>
 
-				{/* Submit Button */}
+				{/* Submit */}
 				<div className="flex justify-end">
 					<button
 						type="submit"
-						className="rounded-md bg-indigo-600 px-6 py-2 text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+						className="rounded-md bg-indigo-600 px-6 py-2 text-white hover:bg-indigo-700"
 					>
 						Save Post
 					</button>

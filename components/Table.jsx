@@ -4,7 +4,7 @@ import { createElement } from 'react'
 function TableWrapper({ children, className = '' }) {
 	return (
 		<div
-			className={`w-full overflow-x-auto rounded-md border border-slate-200 shadow-sm ${className}`}
+			className={`w-full overflow-x-auto  rounded-md border border-slate-200 shadow-sm ${className}`}
 		>
 			{children}
 		</div>
@@ -41,7 +41,7 @@ const TableRow = ({ children, className = '' }) => {
 const TableData = ({ elm = 'td', children, className = '' }) => {
 	const baseClass =
 		elm === 'td'
-			? 'p-3 align-middle'
+			? 'px-4 py-3 align-middle'
 			: 'h-12 px-4 text-left align-middle font-medium text-slate-600'
 	return createElement(
 		elm,

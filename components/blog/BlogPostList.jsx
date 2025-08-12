@@ -1,3 +1,4 @@
+'use client'
 import { blogPosts } from '@/data'
 import Link from 'next/link'
 import BlogCard, {
@@ -11,11 +12,19 @@ import BlogCard, {
 } from './BlogCard'
 import Image from 'next/image'
 import { Calendar, Clock, Eye } from 'lucide-react'
+import { usePosts } from './usePosts'
+import { dateToString } from '@/lib/utils'
 
 const BlogPostList = () => {
+	const { isLoading, posts } = usePosts()
+
+	if (isLoading) return <h4>Loading...</h4>
+
+	console.log(posts)
+
 	return (
 		<div className="card-container grid grid-cols-[minmax(22rem,30rem)] justify-evenly gap-8 min-[50rem]:grid-cols-[minmax(22rem,30rem)_minmax(22rem,30rem)] xl:grid-cols-3">
-			{blogPosts.map((article, i) => (
+			{posts.map((article, i) => (
 				<Link key={article.id} href={`/blog/${article.id}`}>
 					<BlogCard>
 						<Image
@@ -29,22 +38,20 @@ const BlogPostList = () => {
 						<BlogCardBodyWrapper>
 							<BlogCardBody>
 								<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm text-foreground">
-									{article.category}
+									{article.category.name}
 								</p>
 
 								<BlogCardTitle title={article.title} />
 
 								<BlogCardExcerpt excerpt={article.excerpt} />
 
-								<BlogCardTags tags={article.tags} />
+								<BlogCardTags tags={article.post_tags} />
 							</BlogCardBody>
 
 							{/* Author */}
 							<BlogCardAuthor>
 								<Image
-									src={
-										article.author.avatar || '/600x400.svg'
-									}
+									src={'/600x400.svg'}
 									alt={article.author.name}
 									width={40}
 									height={40}
@@ -55,20 +62,21 @@ const BlogPostList = () => {
 										{article.author.name}
 									</p>
 									<p className="text-sm text-muted-foreground">
-										{article.author.role}
+										{article.author.email}
 									</p>
 								</div>
 							</BlogCardAuthor>
 
 							<BlogCardMeta>
 								<p className="inline-flex items-center gap-1">
-									<Calendar size={10} /> Aug 8
+									<Calendar size={10} />
+									{dateToString(article.published_at)}
 								</p>
 								<p className="inline-flex items-center gap-1">
 									<Clock size={10} /> 5 min
 								</p>
 								<p className="col-start-4 inline-flex items-center justify-end gap-1">
-									<Eye size={12} /> 325
+									<Eye size={12} /> {article.views}
 								</p>
 							</BlogCardMeta>
 						</BlogCardBodyWrapper>

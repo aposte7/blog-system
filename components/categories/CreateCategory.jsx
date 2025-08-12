@@ -1,8 +1,7 @@
-'use client'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import InputField from '../InputField'
 import { useCreateCategories } from './useCreateCategories'
+import InputField from '../InputField'
 import { useForm } from 'react-hook-form'
 
 const categorySchema = z.object({
@@ -67,7 +66,6 @@ function CreateCategory() {
 					)}
 				</div>
 
-				{/* Slug */}
 				<div>
 					<label
 						htmlFor="slug"
@@ -89,7 +87,6 @@ function CreateCategory() {
 					)}
 				</div>
 
-				{/* Description */}
 				<div>
 					<label
 						htmlFor="description"
@@ -110,7 +107,6 @@ function CreateCategory() {
 					)}
 				</div>
 
-				{/* Color */}
 				<div>
 					<label
 						htmlFor="color"
