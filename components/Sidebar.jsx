@@ -5,6 +5,11 @@ import {
 	ShieldUser,
 	Folder,
 	MessageCircleIcon,
+	Tag,
+	Notebook,
+	StickyNoteIcon,
+	NotepadText,
+	NotepadTextIcon,
 } from 'lucide-react'
 
 import { default as Link } from 'next/link'
@@ -66,6 +71,13 @@ const Sidebar = () => {
 				>
 					<Folder size="1.3em" className="rounded-md text-inherit" />
 					Categories
+				</Link>
+				<Link
+					href="/admin/tags"
+					className="inline-flex w-full items-center gap-3 rounded px-3 py-1.5 text-sm text-slate-500 hover:bg-purple-500 hover:text-white active:bg-purple-500 active:font-medium"
+				>
+					<Tag size="1.3em" className="rounded-md text-inherit" />
+					Tags
 				</Link>
 			</div>
 			<div className="space-y-1">

@@ -39,15 +39,16 @@ function Button({ children, onClick, className, noOnClick = false }) {
 	const { closeMenu } = useContext(MenuContext)
 
 	function handleClick(e) {
-		if (noOnClick) return null
 		e.preventDefault()
-		onClick?.()
+		if (noOnClick) return null
+		onClick?.(e)
 		closeMenu()
 	}
 
 	return (
 		<button
-			onClick={onClick || handleClick}
+			type="button"
+			onClick={handleClick}
 			className={`${className} flex w-full items-center gap-2 rounded-sm px-4 py-[7px] text-sm text-gray-600 transition-colors hover:bg-gray-100`}
 		>
 			{children}
