@@ -5,8 +5,11 @@ import TableWrapper, {
 	TableData,
 	TableRow,
 } from '@/components/Table'
-import { Ellipsis, Folder } from 'lucide-react'
+import { Edit, Ellipsis, Folder, Trash } from 'lucide-react'
 import { useCategories } from './useCategories'
+import Modal, { OpenModal, ViewModal } from '../Modal'
+import Menus from '../Menu'
+import CreateCategory from './CreateCategory'
 
 function CategoriesList() {
 	const { categories, isLoading } = useCategories()
@@ -59,13 +62,48 @@ function CategoriesList() {
 								</span>
 							</TableData>
 
-							<TableData>
-								<button
-									className="rounded-full p-2 transition-colors hover:bg-gray-100"
-									aria-label="More options"
-								>
-									<Ellipsis />
-								</button>
+							<TableData className="relative z-50">
+								<Modal>
+									<Menus>
+										<Menus.Toggle id="category-action">
+											<button
+												className="rounded-sm px-1 py-1 transition-colors hover:bg-card"
+												aria-label="More options"
+											>
+												<Ellipsis
+													size={15}
+													className="text-muted-foreground"
+												/>
+											</button>
+										</Menus.Toggle>
+										<Menus.MenuViews
+											className="absolute  overflow-visible -top-[100%] left-0"
+											id="category-action"
+										>
+											<OpenModal name="edit-category">
+												<Menus.Button>
+													<Edit size={15} /> Edit
+												</Menus.Button>
+											</OpenModal>
+											<Menus.Button className="text-danger">
+												<Trash
+													className="text-inherit"
+													size={15}
+												/>
+												Delete
+											</Menus.Button>
+										</Menus.MenuViews>
+
+										<ViewModal
+											title="Edit Post"
+											name="edit-category"
+										>
+											<CreateCategory
+												categoryData={category}
+											/>
+										</ViewModal>
+									</Menus>
+								</Modal>
 							</TableData>
 						</TableRow>
 					))}

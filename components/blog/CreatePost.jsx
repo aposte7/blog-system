@@ -11,14 +11,15 @@ import { useTags } from '../Tags/useTags'
 import { useCategories } from '../categories/useCategories'
 import useUploadImage from './useUploadImage'
 import { useImages } from './useImages'
-import { createPost } from '../services/postApi'
+import { useCreatePost } from './useCreatePost'
+import { toast } from 'sonner'
 
 // Validation schema
 const postSchema = z.object({
 	title: z.string().min(1, 'Title is required'),
 	slug: z.string().min(1, 'Slug is required'),
 	category: z.string().min(1, 'Category is required'),
-	status: z.enum(['Drafted', 'Published']),
+	status: z.enum(['drafted', 'published']),
 	publishDate: z.string().min(1, 'Publish date is required'),
 	excerpt: z.string().optional(),
 	featuredImage: z.string().url('Must be a valid URL'),
@@ -26,15 +27,25 @@ const postSchema = z.object({
 	tags: z.array(z.string()).optional(),
 })
 
-function CreatePost({ closeModal }) {
+function CreatePost({ closeModal, postData }) {
 	const { isLoading: isLoadingTags, tags: dbTags } = useTags()
 	const { isLoading: isLoadingCategories, categories: dbCategories } =
 		useCategories()
 	const { uploadImage, isUploading } = useUploadImage()
 	const { images } = useImages()
 
-	const [selectedTags, setSelectedTags] = useState([])
-	const [selectedCategory, setSelectedCategory] = useState(null)
+	const [selectedTags, setSelectedTags] = useState(
+		() => postData?.post_tags.map((tg) => tg.tag) || []
+	)
+	const [selectedCategory, setSelectedCategory] = useState(
+		() =>
+			({
+				id: postData?.category?.id,
+				name: postData?.category?.name,
+			} || [])
+	)
+
+	const { createPost: createPostMutate, isCreating } = useCreatePost()
 
 	const {
 		register,
@@ -42,18 +53,20 @@ function CreatePost({ closeModal }) {
 		control,
 		setValue,
 		watch,
+		reset,
 		formState: { errors },
 	} = useForm({
 		resolver: zodResolver(postSchema),
 		defaultValues: {
-			title: '',
-			slug: '',
-			category: '',
-			status: 'Drafted',
-			publishDate: new Date().toISOString().split('T')[0],
-			excerpt: '',
-			featuredImage: '',
-			content: '# hello write your blog here',
+			title: postData?.title || '',
+			slug: postData?.slug || '',
+			category: postData?.category.id || '',
+			status: postData?.status || 'drafted',
+			publishDate:
+				postData?.publish_at || new Date().toISOString().split('T')[0],
+			excerpt: postData?.excerpt || '',
+			featuredImage: postData?.featured_image || '',
+			content: postData?.content || '# hello write your blog here',
 			tags: [],
 		},
 	})
@@ -69,8 +82,15 @@ function CreatePost({ closeModal }) {
 		data.tags = selectedTags.map((tag) => tag.id)
 		data.media = images
 
-		await createPost(data)
-		console.log('Validated Post:', data)
+		createPostMutate(
+			{ newPost: data, id: postData?.id || null },
+			{
+				onSuccess: (data) => {
+					closeModal?.()
+					reset()
+				},
+			}
+		)
 	}
 
 	return (
@@ -164,19 +184,20 @@ function CreatePost({ closeModal }) {
 							<Menus.Toggle id="status">
 								<button
 									type="button"
-									className="w-full rounded-sm border border-slate-200 px-4 py-2 text-start text-slate-600"
+									className="w-full capitalize rounded-sm border border-slate-200 px-4 py-2 text-start text-slate-600"
 								>
 									{status}
 								</button>
 							</Menus.Toggle>
 							<Menus.MenuViews id="status">
-								{['Drafted', 'Published'].map((s) => (
+								{['drafted', 'published'].map((s) => (
 									<Menus.Button
 										key={s}
 										onClick={(e) => {
 											e.preventDefault()
 											setValue('status', s)
 										}}
+										className="capitalize"
 									>
 										{s}
 									</Menus.Button>
@@ -302,7 +323,9 @@ function CreatePost({ closeModal }) {
 													await navigator.clipboard.writeText(
 														img.image_url
 													)
-													alert('Image URL copied!')
+													toast.success(
+														'Image URL copied!'
+													)
 												}}
 												type="button"
 												className="rounded p-1 hover:bg-gray-100"

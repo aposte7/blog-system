@@ -38,15 +38,27 @@ export async function getCategoryWithPosts(id) {
 	return data
 }
 
-export async function createCategories({ name, slug, description }) {
-	const { data, error } = await supabaseClient
-		.from('categories')
-		.insert([{ name, slug, description, color }])
-		.select()
-		.single()
+export async function createCategories({ name, slug, description, color }, id) {
+	if (id) {
+		const { data, error } = await supabaseClient
+			.from('categories')
+			.update({ name, slug, description, color })
+			.eq('id', id)
+			.select()
+			.single()
 
-	if (error) throw error
-	return data
+		if (error) throw error
+		return data
+	} else {
+		const { data, error } = await supabaseClient
+			.from('categories')
+			.insert([{ name, slug, description, color }])
+			.select()
+			.single()
+
+		if (error) throw error
+		return data
+	}
 }
 
 export async function updateCategory(categoryId, updates) {

@@ -50,7 +50,10 @@ function Button({ children, onClick, className, noOnClick = false }) {
 		<button
 			type="button"
 			onClick={handleClick}
-			className={`${className} flex w-full items-center gap-2 rounded-sm px-4 py-[7px] text-sm text-gray-600 transition-colors hover:bg-gray-100`}
+			className={cn(
+				`flex w-full items-center gap-2 rounded-sm px-4 py-[7px] text-sm text-gray-600 transition-colors hover:bg-gray-100`,
+				className
+			)}
 		>
 			{children}
 		</button>

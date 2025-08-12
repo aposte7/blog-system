@@ -10,7 +10,7 @@ import TableWrapper, {
 	TableRow,
 } from '@/components/Table'
 import { dateToString } from '@/lib/utils'
-import { Delete, Edit, Ellipsis } from 'lucide-react'
+import { Delete, Edit, Ellipsis, Trash } from 'lucide-react'
 
 const PostList = () => {
 	const { posts, isLoading } = usePosts()
@@ -68,7 +68,7 @@ const PostList = () => {
 												</button>
 											</Menus.Toggle>
 											<Menus.MenuViews
-												className="absolute  overflow-visible -top-[110%] left-5"
+												className="absolute  overflow-visible -top-[100%] left-0"
 												id="post-action"
 											>
 												<OpenModal name="edit-post">
@@ -76,13 +76,20 @@ const PostList = () => {
 														<Edit size={15} /> Edit
 													</Menus.Button>
 												</OpenModal>
-												<Menus.Button>
-													<Delete size={15} /> Delete
+												<Menus.Button className="text-danger">
+													<Trash
+														className="text-inherit"
+														size={15}
+													/>
+													Delete
 												</Menus.Button>
 											</Menus.MenuViews>
 
-											<ViewModal name="edit-post">
-												<CreatePost />
+											<ViewModal
+												title="Edit Post"
+												name="edit-post"
+											>
+												<CreatePost postData={post} />
 											</ViewModal>
 										</Menus>
 									</Modal>

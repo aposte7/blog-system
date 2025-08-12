@@ -1,3 +1,4 @@
+'use client'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useCreateCategories } from './useCreateCategories'
@@ -11,7 +12,7 @@ const categorySchema = z.object({
 	color: z.string().nonempty('Color is required'),
 })
 
-function CreateCategory() {
+function CreateCategory({ closeModal, categoryData = {} }) {
 	const { createCategories, isCreating } = useCreateCategories()
 
 	const {
@@ -22,23 +23,24 @@ function CreateCategory() {
 	} = useForm({
 		resolver: zodResolver(categorySchema),
 		defaultValues: {
-			name: '',
-			slug: '',
-			description: '',
-			color: '#8B5CF6',
+			name: categoryData?.name || '',
+			slug: categoryData?.slug || '',
+			description: categoryData?.description || '',
+			color: categoryData?.color || '#8B5CF6',
 		},
 	})
 
 	const onSubmit = (data) => {
-		createCategories(data, {
-			onSuccess: () => {
-				reset()
-				alert('Category created successfully!')
-			},
-			onError: (err) => {
-				alert('Error creating category: ' + err.message)
-			},
-		})
+		createCategories(
+			{ newCategory: data, id: categoryData?.id || null },
+			{
+				onSuccess: () => {
+					closeModal?.()
+					reset()
+				},
+				onError: (err) => {},
+			}
+		)
 	}
 
 	return (
@@ -131,7 +133,7 @@ function CreateCategory() {
 				<div className="flex justify-end gap-2">
 					<button
 						type="button"
-						onClick={() => reset()}
+						onClick={() => closeModal()}
 						className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
 					>
 						Cancel
@@ -141,7 +143,9 @@ function CreateCategory() {
 						disabled={isCreating}
 						className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
 					>
-						{isCreating ? 'Saving...' : 'Create'}
+						{Object.keys(categoryData).length === 0
+							? 'Create'
+							: 'Update'}
 					</button>
 				</div>
 			</div>

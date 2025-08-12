@@ -80,69 +80,125 @@ export async function deletePost(postId) {
 	return data
 }
 
-export async function createPost({
-	title,
-	slug,
-	content,
-	excerpt,
-	featuredImage,
-	status,
-	category,
-	publishDate,
-	media = [],
-	tags = [],
-}) {
+export async function createPost(
+	{
+		title,
+		slug,
+		content,
+		excerpt,
+		featuredImage,
+		status,
+		category,
+		publishDate,
+		media = [],
+		tags = [],
+	},
+	id // optional, if provided → update mode
+) {
 	const profile = await getCurrentUserProfile()
 	if (!profile) throw new Error('User not authenticated')
 
-	const { data: postData, error: postError } = await supabaseClient
-		.from('posts')
-		.insert([
-			{
+	let postId
+
+	if (id) {
+		// ---------------- UPDATE POST ----------------
+		const { data: updatedPost, error: updateError } = await supabaseClient
+			.from('posts')
+			.update({
 				title,
 				slug,
 				content,
 				excerpt,
 				featured_image: featuredImage,
 				status: status.toLowerCase(),
-				author_id: profile.id,
 				category_id: category,
-				views: 0,
 				published_at: publishDate,
-			},
-		])
-		.select()
-		.single()
+				updated_at: new Date().toISOString(),
+			})
+			.eq('id', id)
+			.select()
+			.single()
 
-	if (postError) throw postError
-	const postId = postData.id
+		if (updateError) throw updateError
+		postId = updatedPost.id
 
-	if (tags.length > 0) {
-		const tagRows = tags.map((tagId) => ({
-			post_id: postId,
-			tag_id: tagId,
-		}))
-		const { error: tagsError } = await supabaseClient
-			.from('post_tags')
-			.insert(tagRows)
+		// Remove old tags & re-insert
+		await supabaseClient.from('post_tags').delete().eq('post_id', postId)
+		if (tags.length > 0) {
+			const tagRows = tags.map((tagId) => ({
+				post_id: postId,
+				tag_id: tagId,
+			}))
+			const { error: tagsError } = await supabaseClient
+				.from('post_tags')
+				.insert(tagRows)
+			if (tagsError) throw tagsError
+		}
 
-		if (tagsError) throw tagsError
+		// Remove old media & re-insert
+		await supabaseClient.from('post_media').delete().eq('post_id', postId)
+		if (media.length > 0) {
+			const mediaRows = media.map((md) => ({
+				post_id: postId,
+				media_id: md.id,
+			}))
+			const { error: mediaError } = await supabaseClient
+				.from('post_media')
+				.insert(mediaRows)
+			if (mediaError) throw mediaError
+		}
+
+		return updatedPost
+	} else {
+		// ---------------- CREATE POST ----------------
+		const { data: postData, error: postError } = await supabaseClient
+			.from('posts')
+			.insert([
+				{
+					title,
+					slug,
+					content,
+					excerpt,
+					featured_image: featuredImage,
+					status: status.toLowerCase(),
+					author_id: profile.id,
+					category_id: category,
+					views: 0,
+					published_at: publishDate,
+				},
+			])
+			.select()
+			.single()
+
+		if (postError) throw postError
+		postId = postData.id
+
+		// Insert tags
+		if (tags.length > 0) {
+			const tagRows = tags.map((tagId) => ({
+				post_id: postId,
+				tag_id: tagId,
+			}))
+			const { error: tagsError } = await supabaseClient
+				.from('post_tags')
+				.insert(tagRows)
+			if (tagsError) throw tagsError
+		}
+
+		// Insert media
+		if (media.length > 0) {
+			const mediaRows = media.map((md) => ({
+				post_id: postId,
+				media_id: md.id,
+			}))
+			const { error: mediaError } = await supabaseClient
+				.from('post_media')
+				.insert(mediaRows)
+			if (mediaError) throw mediaError
+		}
+
+		return postData
 	}
-
-	// Insert media if any
-	if (media.length > 0) {
-		const mediaRows = media.map((md) => ({
-			post_id: postId,
-			media_id: md.id,
-		}))
-		const { error: mediaError } = await supabaseClient
-			.from('post_media')
-			.insert(mediaRows)
-
-		if (mediaError) throw mediaError
-	}
-
-	return postData
 }
 
 export async function uploadImage(imageFile) {

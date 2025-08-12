@@ -1,15 +1,23 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createPost } from '../services/postApi'
+import { createPost as createPostApi } from '../services/postApi'
+import { toast } from 'sonner'
 
 export function useCreatePost() {
 	const queryClient = useQueryClient()
 
-	const { mutate: createPostApi, isLading: isCreating } = useMutation({
-		mutationFn: (newPost) => createPost(newPost),
-		onSuccess: () => {
+	const { mutate: createPost, isLading: isCreating } = useMutation({
+		mutationFn: ({ newPost, id }) => createPostApi(newPost, id),
+		onSuccess: (data, variables) => {
+			if (variables.id) {
+				toast.success('Post successfully updated!')
+			} else {
+				toast.success('New post successfully created!')
+			}
+
 			queryClient.invalidateQueries(['posts'])
 		},
+		onError: (err) => toast.error(err.message),
 	})
 
-	return { isCreating, createPostApi }
+	return { isCreating, createPost }
 }
