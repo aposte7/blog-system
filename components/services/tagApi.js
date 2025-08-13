@@ -39,29 +39,28 @@ export async function getTagsWithPosts(id) {
 }
 
 export async function createTags({ name, slug, description }, id) {
-	console.log(name, slug, description, id)
-	// if (id) {
-	// 	const { data, error } = await supabaseClient
-	// 		.from('tags')
-	// 		.update({ name, slug, description, color })
-	// 		.eq('id', id)
-	// 		.select()
-	// 		.single()
+	if (id) {
+		const { data, error } = await supabaseClient
+			.from('tags')
+			.update({ name, slug, description, color })
+			.eq('id', id)
+			.select()
+			.single()
 
-	// 	if (error) throw error
-	// 	return data
-	// } else {
-	// 	const { data, error } = await supabaseClient
-	// 		.from('tags')
-	// 		.insert([{ name, slug, description, color }])
-	// 		.select()
-	// 		.single()
-	// 	if (error) throw error
-	// 	return data
-	// }
+		if (error) throw error
+		return data
+	} else {
+		const { data, error } = await supabaseClient
+			.from('tags')
+			.insert([{ name, slug, description, color }])
+			.select()
+			.single()
+		if (error) throw error
+		return data
+	}
 }
 
-export async function deleteCategory(tagId) {
+export async function deleteTag(tagId) {
 	const { data, error } = await supabaseClient
 		.from('tags')
 		.delete()

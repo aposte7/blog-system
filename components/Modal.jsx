@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from '@/lib/utils'
 import { X } from 'lucide-react'
 import { cloneElement, createContext, useContext, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -29,7 +30,7 @@ function OpenModal({ name, children, fn }) {
 	})
 }
 
-function ViewModal({ name, children, title }) {
+function ViewModal({ name, children, title, titleClass }) {
 	const { closeModal, modalName } = useContext(FormContext)
 
 	if (modalName !== name) return null
@@ -42,7 +43,12 @@ function ViewModal({ name, children, title }) {
 			<div className="absolute top-1/2 left-1/2 h-fit -translate-1/2 overflow-hidden rounded-lg bg-white">
 				<div className="flex items-center justify-between p-6">
 					{title && (
-						<h3 className="text-2xl font-semibold text-gray-800 capitalize">
+						<h3
+							className={cn(
+								'text-xl font-semibold text-gray-800 capitalize',
+								titleClass
+							)}
+						>
 							{title}
 						</h3>
 					)}

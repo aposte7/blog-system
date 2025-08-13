@@ -10,11 +10,14 @@ import { useTags } from './useTags'
 import Modal, { OpenModal, ViewModal } from '../Modal'
 import Menus from '../Menu'
 import CreateTag from './CreateTag'
+import PopupConfirm from '../PopupConfirm'
+import useDeleteTags from './useDeleteTags'
 
 function TagList() {
 	const { isLoading, tags } = useTags()
+	const { isDeleting, deleteTag } = useDeleteTags()
 
-	if (isLoading) return <h1>Loading...</h1>
+	if (isLoading || isDeleting) return <h1>Loading...</h1>
 
 	return (
 		<TableWrapper>
@@ -87,13 +90,16 @@ function TagList() {
 													<Edit size={15} /> Edit
 												</Menus.Button>
 											</OpenModal>
-											<Menus.Button className="text-danger">
-												<Trash
-													className="text-inherit"
-													size={15}
-												/>
-												Delete
-											</Menus.Button>
+
+											<OpenModal name="delete-tag">
+												<Menus.Button className="text-danger">
+													<Trash
+														className="text-inherit"
+														size={15}
+													/>
+													Delete
+												</Menus.Button>
+											</OpenModal>
 										</Menus.MenuViews>
 
 										<ViewModal
@@ -101,6 +107,28 @@ function TagList() {
 											name="edit-tag"
 										>
 											<CreateTag tagData={tag} />
+										</ViewModal>
+										<ViewModal
+											title="Confirm  Your Action"
+											name="delete-tag"
+											titleClass="text-sm"
+										>
+											<PopupConfirm
+												onConfirm={() =>
+													deleteTag(tag.id)
+												}
+												message={
+													<>
+														Are you sure you want to
+														delete the tag{' '}
+														<strong>
+															"{tag.name}"
+														</strong>
+														? This action cannot be
+														undone.
+													</>
+												}
+											/>
 										</ViewModal>
 									</Menus>
 								</Modal>

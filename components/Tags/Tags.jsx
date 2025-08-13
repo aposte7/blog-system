@@ -1,13 +1,6 @@
-import TableWrapper, {
-	Table,
-	TableContainer,
-	TableData,
-	TableRow,
-} from '@/components/Table'
 import { Filter, Plus } from 'lucide-react'
 import Modal, { OpenModal, ViewModal } from '../Modal'
 import CreateTag from './CreateTag'
-import { useCategories } from './useTags'
 import TagList from './TagList'
 
 function Tags() {
