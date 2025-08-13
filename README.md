@@ -411,3 +411,308 @@ const { data: related } = await supabase
 ```
 
 These examples rely on FKs in the schema to auto-generate PostgREST relationships (aliases like `author:profiles` use `author_id` → `profiles.id`). If your names differ, adjust the aliases accordingly.
+
+## 13) Routes and pages (App Router)
+
+This project uses Next.js App Router with route groups for clear separation between public, auth, and admin areas. Grouped segments (wrapped in parentheses) don’t appear in the URL.
+
+Directory map (current app):
+
+```
+app/
+	layout.js                 -> Root layout (HTML/BODY wrapper)
+	page.jsx                  -> Home page (/)
+
+	(auth)/
+		login/
+			page.jsx              -> /login
+
+	(root)/                   -> Public site group (segment not in URL)
+		layout.jsx              -> Public layout; adds NavBar and Toaster
+		blog/
+			page.jsx              -> /blog (posts listing)
+			[blogId]/
+				page.jsx            -> /blog/:blogId (post detail)
+
+	(dashboard)/              -> Admin group (segment not in URL)
+		admin/
+			layout.jsx            -> Admin layout; ProtectedRoute + BlogLayout + Toaster
+			page.jsx              -> /admin (dashboard home)
+			categories/
+				page.jsx            -> /admin/categories
+			posts/
+				page.jsx            -> /admin/posts
+			tags/
+				page.jsx            -> /admin/tags
+			comments/
+				page.jsx            -> /admin/comments
+			users/
+				page.jsx            -> /admin/users
+```
+
+Key layout layers
+
+-   `app/layout.js`: Global document shell. Keep only HTML/BODY and truly global providers here.
+-   `app/(root)/layout.jsx`: Public layout. In this repo it renders `NavBar` and `<Toaster />` and then `{children}`.
+-   `app/(dashboard)/admin/layout.jsx`: Admin layout. Wraps with `ProtectedRoute` (client-side auth guard), renders `BlogLayout` (sidebar + topbar), and adds `<Toaster />`.
+
+Public routes
+
+-   `/` (app/page.jsx)
+
+    -   Your landing page. Customize freely.
+
+-   `/blog` (app/(root)/blog/page.jsx)
+
+    -   Renders the blog listing via `components/blog/BlogPostList` and supporting UI.
+    -   Uses React Query hooks like `usePosts()` under the hood.
+
+-   `/blog/:blogId` (app/(root)/blog/[blogId]/page.jsx)
+    -   Dynamic route rendering `components/blog/BlogDetailPage`.
+    -   Pass route params to the client component: `export default function Page({ params }) { return <BlogDetailPage params={params} /> }`.
+    -   The page component/hook expects `params.blogId` and queries Supabase via `usePost({ blogId })`.
+
+Auth route
+
+-   `/login` (app/(auth)/login/page.jsx)
+    -   Renders `components/LoginForm`.
+    -   `useLogin()` hook performs mutation and, on success, routes to `/admin`.
+
+Admin routes
+
+-   `/admin` (app/(dashboard)/admin/page.jsx)
+
+    -   Dashboard home. In this repo it renders `components/admin/HomePage`.
+    -   `HomePage` may use helper hooks like `useTotalPosts`, `useTotalComments`, `useTotalViews`.
+
+-   `/admin/categories` (app/(dashboard)/admin/categories/page.jsx)
+
+    -   Renders `components/categories/CategoriesPage` with list/create flows using hooks like `useCategories()` and `useCreateCategories()`.
+
+-   `/admin/posts` (app/(dashboard)/admin/posts/page.jsx)
+
+    -   Renders `components/admin/posts/PostPage` (which composes `PostList`, `CreatePost`, etc.).
+    -   Mutations include `useCreatePost`, `useDeletePost`, `useUpdatePostFeatured`, and `useUploadImage`.
+
+-   `/admin/tags` (app/(dashboard)/admin/tags/page.jsx)
+
+    -   Renders `components/Tags/TagsPage` (which composes `TagList`, `CreateTag`).
+    -   Mutations via `useCreateTags` and `useDeleteTags`.
+
+-   `/admin/comments` (app/(dashboard)/admin/comments/page.jsx)
+
+    -   Currently a placeholder (`CommentPage` → `ComingSoon`).
+
+-   `/admin/users` (app/(dashboard)/admin/users/page.jsx)
+    -   Currently a placeholder (`UsersPage` → `ComingSoon`).
+
+Client vs server notes
+
+-   Many components are Client Components (marked `'use client'`) because they rely on React Query, events, and state.
+-   Route files (page.jsx) can be Server Components but often just forward `params` to the client component.
+-   Ensure all client components used at the page level are wrapped by `QueryProvider` somewhere up the tree (see section 4).
+
+Common pitfalls
+
+-   Default export: Every route file must have a default export that returns a React node.
+-   Dynamic params: Don’t forget to pass `{ params }` into client detail components.
+-   ProtectedRoute: Ensure it returns `children` only when authenticated; otherwise redirect or render null/loading.
+-   Hydration mismatches: Avoid non-deterministic code at layout boundaries; remove extension-injected attributes in a `useEffect` if necessary.
+
+## Table of contents
+
+-   [1) Install](#1-install)
+-   [2) Environment variables (Supabase)](#2-environment-variables-supabase)
+-   [3) Global styles](#3-global-styles)
+-   [4) Providers (React Query and toast)](#4-providers-react-query-and-toast)
+-   [5) Quick start — Blog pages](#5-quick-start--blog-pages)
+-   [6) Admin area (optional)](#6-admin-area-optional)
+-   [7) Deep imports](#7-deep-imports)
+-   [8) Mutations cheat sheet](#8-mutations-cheat-sheet)
+-   [9) Troubleshooting](#9-troubleshooting)
+-   [10) Scripts](#10-scripts)
+-   [11) Notes and caveats](#11-notes-and-caveats)
+-   [12) Database schema (Supabase)](#12-database-schema-supabase)
+-   [13) Routes and pages (App Router)](#13-routes-and-pages-app-router)
+-   [14) Route and layout snippets (copy-paste)](#14-route-and-layout-snippets-copy-paste)
+
+## 14) Route and layout snippets (copy-paste)
+
+Below are minimal route and layout files you can drop into your App Router project. Group folders in parentheses don’t appear in the URL.
+
+Root layout (app/layout.tsx or .js)
+
+```tsx
+// app/layout.tsx
+import QueryProvider from 'blog-system-ui/components/QueryProvider'
+import 'blog-system-ui/globals.css'
+
+export default function RootLayout({
+	children,
+}: {
+	children: React.ReactNode
+}) {
+	return (
+		<html lang="en">
+			<body>
+				<QueryProvider>{children}</QueryProvider>
+			</body>
+		</html>
+	)
+}
+```
+
+Public layout (app/(root)/layout.tsx)
+
+```tsx
+// app/(root)/layout.tsx
+import NavBar from 'blog-system-ui/components/NavBar'
+import { Toaster } from 'sonner'
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+	return (
+		<>
+			<NavBar />
+			{children}
+			<Toaster position="top-right" richColors />
+		</>
+	)
+}
+```
+
+Admin layout (app/(dashboard)/admin/layout.tsx)
+
+```tsx
+// app/(dashboard)/admin/layout.tsx
+import ProtectedRoute from 'blog-system-ui/components/ProtectedRoute'
+import BlogLayout from 'blog-system-ui/components/blog/BlogLayout'
+import { Toaster } from 'sonner'
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+	return (
+		<ProtectedRoute>
+			<BlogLayout>{children}</BlogLayout>
+			<Toaster position="top-right" richColors />
+		</ProtectedRoute>
+	)
+}
+```
+
+Home page (app/page.tsx)
+
+```tsx
+// app/page.tsx
+export default function Page() {
+	return <div>Home</div>
+}
+```
+
+Login page (app/(auth)/login/page.tsx)
+
+```tsx
+// app/(auth)/login/page.tsx
+import LoginForm from 'blog-system-ui/components/LoginForm'
+
+export default function Page() {
+	return (
+		<div>
+			<LoginForm />
+		</div>
+	)
+}
+```
+
+Blog list (app/(root)/blog/page.tsx)
+
+```tsx
+// app/(root)/blog/page.tsx
+import BlogPostList from 'blog-system-ui/components/blog/BlogPostList'
+
+export default function Page() {
+	return <BlogPostList />
+}
+```
+
+Blog detail (app/(root)/blog/[blogId]/page.tsx)
+
+```tsx
+// app/(root)/blog/[blogId]/page.tsx
+import BlogDetailPage from 'blog-system-ui/components/blog/BlogDetailPage'
+
+export default function Page({ params }: { params: { blogId: string } }) {
+	return <BlogDetailPage params={params} />
+}
+```
+
+Admin dashboard (app/(dashboard)/admin/page.tsx)
+
+```tsx
+// app/(dashboard)/admin/page.tsx
+import HomePage from 'blog-system-ui/components/admin/HomePage'
+
+export default function Page() {
+	return <HomePage />
+}
+```
+
+Admin categories (app/(dashboard)/admin/categories/page.tsx)
+
+```tsx
+// app/(dashboard)/admin/categories/page.tsx
+import CategoriesPage from 'blog-system-ui/components/categories/CategoriesPage'
+
+export default function Page() {
+	return <CategoriesPage />
+}
+```
+
+Admin posts (app/(dashboard)/admin/posts/page.tsx)
+
+```tsx
+// app/(dashboard)/admin/posts/page.tsx
+import PostPage from 'blog-system-ui/components/admin/posts/PostPage'
+
+export default function Page() {
+	return <PostPage />
+}
+```
+
+Admin tags (app/(dashboard)/admin/tags/page.tsx)
+
+```tsx
+// app/(dashboard)/admin/tags/page.tsx
+import TagsPage from 'blog-system-ui/components/Tags/TagsPage'
+
+export default function Page() {
+	return <TagsPage />
+}
+```
+
+Admin comments (app/(dashboard)/admin/comments/page.tsx)
+
+```tsx
+// app/(dashboard)/admin/comments/page.tsx
+import CommentPage from 'blog-system-ui/components/comment/CommentPage'
+
+export default function Page() {
+	return <CommentPage />
+}
+```
+
+Admin users (app/(dashboard)/admin/users/page.tsx)
+
+```tsx
+// app/(dashboard)/admin/users/page.tsx
+import UsersPage from 'blog-system-ui/components/users/UsersPage'
+
+export default function Page() {
+	return <UsersPage />
+}
+```
+
+Notes
+
+-   Every route file must default-export a React component.
+-   For dynamic routes, pass `params` to the client component that needs them.
+-   Ensure `QueryProvider` is present above any client components using React Query.
+-   If your project doesn’t use TypeScript, drop the type annotations.
