@@ -2,6 +2,23 @@
 
 This repo can be consumed as a component/data hooks library in your own Next.js app. It ships reusable Blog UI (cards, lists, detail page, admin screens) plus data hooks powered by React Query and Supabase.
 
+## Table of contents
+
+-   [1) Install](#1-install)
+-   [2) Environment variables (Supabase)](#2-environment-variables-supabase)
+-   [3) Global styles](#3-global-styles)
+-   [4) Providers (React Query and toast)](#4-providers-react-query-and-toast)
+-   [5) Quick start — Blog pages](#5-quick-start--blog-pages)
+-   [6) Admin area (optional)](#6-admin-area-optional)
+-   [7) Deep imports](#7-deep-imports)
+-   [8) Mutations cheat sheet](#8-mutations-cheat-sheet)
+-   [9) Troubleshooting](#9-troubleshooting)
+-   [10) Scripts](#10-scripts)
+-   [11) Notes and caveats](#11-notes-and-caveats)
+-   [12) Database schema (Supabase)](#12-database-schema-supabase)
+-   [13) Routes and pages (App Router)](#13-routes-and-pages-app-router)
+-   [14) Route and layout snippets (copy-paste)](#14-route-and-layout-snippets-copy-paste)
+
 The package name is declared in `package.json` as `blog-system-ui` and exposes:
 
 -   `components/*` (React components and hooks)
@@ -518,23 +535,6 @@ Common pitfalls
 -   Dynamic params: Don’t forget to pass `{ params }` into client detail components.
 -   ProtectedRoute: Ensure it returns `children` only when authenticated; otherwise redirect or render null/loading.
 -   Hydration mismatches: Avoid non-deterministic code at layout boundaries; remove extension-injected attributes in a `useEffect` if necessary.
-
-## Table of contents
-
--   [1) Install](#1-install)
--   [2) Environment variables (Supabase)](#2-environment-variables-supabase)
--   [3) Global styles](#3-global-styles)
--   [4) Providers (React Query and toast)](#4-providers-react-query-and-toast)
--   [5) Quick start — Blog pages](#5-quick-start--blog-pages)
--   [6) Admin area (optional)](#6-admin-area-optional)
--   [7) Deep imports](#7-deep-imports)
--   [8) Mutations cheat sheet](#8-mutations-cheat-sheet)
--   [9) Troubleshooting](#9-troubleshooting)
--   [10) Scripts](#10-scripts)
--   [11) Notes and caveats](#11-notes-and-caveats)
--   [12) Database schema (Supabase)](#12-database-schema-supabase)
--   [13) Routes and pages (App Router)](#13-routes-and-pages-app-router)
--   [14) Route and layout snippets (copy-paste)](#14-route-and-layout-snippets-copy-paste)
 
 ## 14) Route and layout snippets (copy-paste)
 
