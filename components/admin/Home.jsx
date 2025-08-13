@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { DashboardChart } from './DashboardChart'
+import { BlogRecentPosts } from '../blog/BlogHome'
 
 const recentPosts = [
 	{
@@ -112,48 +113,9 @@ const Home = () => {
 				</div>
 
 				<div className="p-4 space-y-4">
-					{recentPosts.map((post, index) => (
-						<div
-							key={index}
-							className="flex items-center justify-between bg-muted rounded-lg border border-border p-3 hover:bg- transition-colors"
-						>
-							<div className="flex-1">
-								<h4 className="mb-1 text-secondary-foreground text-sm font-medium">
-									{post.title}
-								</h4>
-								<div className="flex items-center gap-4 text-xs text-muted-foreground">
-									<div
-										className={`px-2 py-0.5 rounded-full text-card text-[10px] font-medium ${
-											post.status === 'Published'
-												? 'bg-green-500'
-												: 'bg-gray-400'
-										}`}
-									>
-										{post.status}
-									</div>
-
-									<div className="flex items-center gap-1">
-										<Eye className="h-3 w-3" />
-										{post.views}
-									</div>
-
-									<div className="flex items-center gap-1">
-										<MessageSquare className="h-3 w-3" />
-										{post.comments}
-									</div>
-
-									<div className="flex items-center gap-1">
-										<Calendar className="h-3 w-3" />
-										{post.date}
-									</div>
-								</div>
-							</div>
-
-							<button className="p-2 hover:bg-gray-100 rounded-md transition-colors">
-								<Edit className="h-4 w-4" />
-							</button>
-						</div>
-					))}
+					<div className="rounded-xl border border-border bg-card shadow-sm">
+						<BlogRecentPosts />
+					</div>
 				</div>
 			</div>
 		</section>

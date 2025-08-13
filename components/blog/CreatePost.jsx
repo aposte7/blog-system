@@ -356,15 +356,6 @@ function CreatePost({ closeModal, postData }) {
 											>
 												<FileText size={16} />
 											</button>
-											<button
-												type="button"
-												className="rounded p-1 text-red-500 hover:bg-red-100"
-												onClick={() =>
-													console.log('Remove image')
-												}
-											>
-												<Trash2 size={16} />
-											</button>
 										</div>
 									</div>
 								</div>

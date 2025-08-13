@@ -115,8 +115,8 @@ const BlogRecentPosts = () => {
 							<h4 className="text-sm font-medium text-foreground">
 								{title}
 							</h4>
-							<div className="mt-2 flex gap-3 text-xs text-muted-foreground">
-								<p className="inline-flex pr-4 items-center gap- border-r border-border">
+							<div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
+								<p className="inline-flex flex-1 pr-4 items-center gap-1 border-r border-border">
 									<Calendar
 										className="text-inherit"
 										size={10}
@@ -125,7 +125,7 @@ const BlogRecentPosts = () => {
 										published_at
 									).toLocaleDateString()}
 								</p>
-								<p className="inline-flex pl-4 items-center gap-1">
+								<p className="inline-flex flex-1 pl-4 items-center gap-1">
 									<Clock size={10} className="text-inherit" />
 									{read_time || '—'} min read
 								</p>

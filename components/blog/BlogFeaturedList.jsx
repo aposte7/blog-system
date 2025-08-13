@@ -88,7 +88,7 @@ const BlogFeaturedList = () => {
 									{dateToString(article.published_at)}
 								</p>
 								<p className="inline-flex items-center gap-1">
-									<Clock size={10} /> 5 min
+									<Clock size={10} /> {article.read_time} min
 								</p>
 								<p className="col-start-4 inline-flex items-center justify-end gap-1">
 									<Eye size={12} /> {article.views}

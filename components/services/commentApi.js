@@ -9,6 +9,7 @@ export async function getComments(postId) {
 
 	const { data, error } = await query
 
+	console.log('comments -------', data)
 	if (error) throw error
 
 	return data
@@ -16,9 +17,9 @@ export async function getComments(postId) {
 
 export async function createComment({
 	content,
-	authorName,
-	authorEmail,
-	postId,
+	name,
+	email,
+	post_id,
 	parentId = null,
 }) {
 	const { data, error } = await supabaseClient
@@ -26,11 +27,11 @@ export async function createComment({
 		.insert([
 			{
 				content,
-				author_name: authorName,
-				author_email: authorEmail,
-				post_id: postId,
+				author_name: name,
+				author_email: email,
+				post_id,
 				parent_id: parentId,
-				status: 'pending', // default
+				status: 'approved',
 			},
 		])
 		.select()

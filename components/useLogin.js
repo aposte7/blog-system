@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { login } from './services/authApi'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export function useLogin() {
 	const router = useRouter()
@@ -13,7 +14,7 @@ export function useLogin() {
 			router.push('/admin')
 		},
 		onError: (err) => {
-			console.log(err.message)
+			toast.error(err.message)
 		},
 	})
 

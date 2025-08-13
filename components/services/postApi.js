@@ -25,7 +25,6 @@ export async function getPosts() {
 		.order('created_at', { ascending: false })
 
 	if (error) throw error
-	console.log(data)
 	return data
 }
 export async function getRecentPosts() {
@@ -53,6 +52,44 @@ export async function getRecentPosts() {
 		.limit(3)
 
 	if (error) throw error
+	return data || []
+}
+
+export async function getRelatedPosts(categoryId, currentPostId) {
+	if (!categoryId || !currentPostId) {
+		console.warn('Missing categoryId or currentPostId for getRelatedPosts')
+		return []
+	}
+
+	const { data, error } = await supabaseClient
+		.from('posts')
+		.select(
+			`
+			id,
+			title,
+			slug,
+			excerpt,
+			featured_image,
+			status,
+			views,
+			published_at,
+			updated_at,
+			featured,
+			author:profiles(id, name, email, company_role, avatar),
+			category:categories(id, name, slug, color),
+			post_tags(tag:tags(id, name, slug, color)),
+			read_time
+		`
+		)
+		.eq('category_id', categoryId)
+		.neq('id', currentPostId)
+		.order('published_at', { ascending: false })
+
+	if (error) {
+		console.error('Error fetching related posts:', error.message)
+		return []
+	}
+
 	return data || []
 }
 

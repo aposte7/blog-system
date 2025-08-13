@@ -84,10 +84,11 @@ const BlogHeader = () => {
 				<BlogHeroImage>
 					<Image
 						src="/600x400.svg"
-						alt=""
+						alt="hero image"
 						width={100}
 						height={100}
-						className="h-full w-full object-cover"
+						quality={100}
+						className="h-full aspect-[16/9] w-full object-cover"
 					/>
 				</BlogHeroImage>
 			</BlogHero>
@@ -120,7 +121,7 @@ const BlogHeroImage = ({ children, className }) => {
 	return (
 		<div
 			className={cn(
-				'hero-image h-[32rem] overflow-hidden rounded-lg bg-amber-500',
+				'hero-image h-[28rem] overflow-hidden rounded-lg bg-amber-500',
 				className
 			)}
 		>

@@ -15,6 +15,17 @@ import { Loading } from '../Loading'
 import { usePost } from './usePost'
 import Link from 'next/link'
 import Image from 'next/image'
+import BlogCard, {
+	BlogCardBody,
+	BlogCardBodyWrapper,
+	BlogCardExcerpt,
+	BlogCardMeta,
+	BlogCardTitle,
+} from './BlogCard'
+import { useRelatedPosts } from './useRelatedPost'
+import { dateToString } from '@/lib/utils'
+import CommentForm from '../comment/CommentForm'
+import Comment from '../comment/Comment'
 
 const BlogDetailPage = ({ params }) => {
 	const { post, isLoading } = usePost(params)
@@ -23,7 +34,6 @@ const BlogDetailPage = ({ params }) => {
 		return <Loading message="loading..." />
 	}
 
-	console.log('readed?', post)
 	if (!post) {
 		return (
 			<Empty title="No Post Is Found">
@@ -58,7 +68,7 @@ const BlogDetailPage = ({ params }) => {
 							</Link>
 							<header className="space-y-6">
 								<div className="bg-primary/10 w-fit rounded-full py-px px-3 text-sm text-primary border-primary/20">
-									{post.category.name}
+									{post.category?.name}
 								</div>
 
 								<h1 className="font-serif text-4xl md:text-5xl font-bold leading-tight">
@@ -157,13 +167,17 @@ const BlogDetailPage = ({ params }) => {
 									</button>
 								</div>
 							</div>
+							<RelatedPost
+								categoryId={post.category?.id}
+								currentPostId={post.id}
+							/>
 							<section className="space-y-8">
 								<hr />
-
-								{/* <Comment
-									key={comment.id}
-									commentData={post.comments}
-								/> */}
+								<section className="space-y-8">
+									<hr />
+									<CommentForm params={params} />
+									<Comment params={params} />
+								</section>
 							</section>
 						</article>
 
@@ -180,79 +194,67 @@ const BlogDetailPage = ({ params }) => {
 
 export default BlogDetailPage
 
-// {relatedPosts.length > 0 && (
-// 	<section className="space-y-6">
-// 		<h2 className="font-serif text-2xl font-bold">
-// 			Related Articles
-// 		</h2>
-// 		<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-// 			{relatedPosts.map((relatedPost) => (
-// 				<Link
-// 					key={relatedPost.id}
-// 					href={`/blog/${relatedPost.id}`}
-// 				>
-// 					<BlogCard className="">
-// 						<Image
-// 							src="/600x400.svg"
-// 							alt="Blog image"
-// 							width={400}
-// 							height={200}
-// 							className=" object-cover w-full h-[11rem] transition-transform duration-500 group-hover:scale-105"
-// 						/>
+const RelatedPost = ({ categoryId, currentPostId }) => {
+	const { relatedPosts, isLoading } = useRelatedPosts({
+		categoryId,
+		currentPostId,
+	})
 
-// 						<BlogCardBodyWrapper>
-// 							<BlogCardBody>
-// 								<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm text-foreground">
-// 									{
-// 										relatedPost.category
-// 									}
-// 								</p>
+	if (isLoading) return <Loading />
+	if (relatedPosts?.length === 0) {
+		return
+	}
 
-// 								<BlogCardTitle
-// 									title={
-// 										relatedPost.title
-// 									}
-// 									className="md:text-base"
-// 								/>
+	return (
+		<section className="space-y-6">
+			<h2 className="font-serif text-2xl font-bold">Related Articles</h2>
+			<div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+				{relatedPosts.map((relatedPost) => (
+					<Link key={relatedPost.id} href={`/blog/${relatedPost.id}`}>
+						<BlogCard className="">
+							<Image
+								src={relatedPost.featured_image}
+								alt="Blog image"
+								width={400}
+								height={200}
+								className=" object-cover w-full h-[11rem] transition-transform duration-500 group-hover:scale-105"
+							/>
 
-// 								<BlogCardExcerpt
-// 									excerpt={
-// 										relatedPost.excerpt
-// 									}
-// 								/>
-// 							</BlogCardBody>
+							<BlogCardBodyWrapper>
+								<BlogCardBody>
+									<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm text-foreground">
+										{relatedPost?.category?.name ||
+											'Unknown'}
+									</p>
 
-// 							<BlogCardMeta>
-// 								<p className="inline-flex items-center gap-1">
-// 									<Calendar
-// 										size={10}
-// 									/>{' '}
-// 									Aug 8
-// 								</p>
-// 								<p className="inline-flex items-center gap-1">
-// 									<Clock
-// 										size={10}
-// 									/>{' '}
-// 									5 min
-// 								</p>
-// 								<p className="col-start-4 inline-flex items-center justify-end gap-1">
-// 									<Eye
-// 										size={12}
-// 									/>{' '}
-// 									325
-// 								</p>
-// 							</BlogCardMeta>
-// 						</BlogCardBodyWrapper>
-// 					</BlogCard>
-// 				</Link>
-// 			))}
-// 		</div>
-// 	</section>
-// )}
-// {/* Comments Section */}
-// <section className="space-y-8">
-// 	<hr />
+									<BlogCardTitle
+										title={relatedPost.title}
+										className="md:text-base"
+									/>
 
-// 	<CommentForm />
-// 	<Comment />
-// </section>
+									<BlogCardExcerpt
+										excerpt={relatedPost.excerpt}
+									/>
+								</BlogCardBody>
+
+								<BlogCardMeta>
+									<p className="inline-flex items-center gap-1">
+										<Calendar size={10} />{' '}
+										{dateToString(relatedPost.published_at)}
+									</p>
+									<p className="inline-flex items-center gap-1">
+										<Clock size={10} />{' '}
+										{relatedPost?.read_time} min
+									</p>
+									<p className="col-start-4 inline-flex items-center justify-end gap-1">
+										<Eye size={12} /> {relatedPost.views}
+									</p>
+								</BlogCardMeta>
+							</BlogCardBodyWrapper>
+						</BlogCard>
+					</Link>
+				))}
+			</div>
+		</section>
+	)
+}

@@ -8,7 +8,6 @@ function useDeleteTags() {
 	const { mutate: deleteTag, isLoading: isDeleting } = useMutation({
 		mutationFn: deleteTagApi,
 		onSuccess: (data) => {
-			console.log('tag delete', data)
 			toast.success('Tag successfully Deleted')
 			queryClient.invalidateQueries(['tags'])
 		},
