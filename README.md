@@ -272,3 +272,142 @@ Import the library CSS in your root layout and ensure your own app CSS (if any) 
 ---
 
 Questions or improvements? Open an issue or PR in your fork of this repository.
+
+## 12) Database schema (Supabase)
+
+This library expects a Supabase schema similar to the provided `sql/schema.sql`. It includes:
+
+-   profiles (linked to `auth.users`) — authors
+-   categories
+-   tags
+-   posts (FK: `author_id` → profiles, `category_id` → categories)
+-   post_tags (many-to-many posts ↔ tags)
+-   comments
+-   media and post_media (optional, for assets)
+
+### 12.1 Initialize schema
+
+Run the SQL in `sql/schema.sql` inside Supabase SQL Editor. If needed, ensure the `pgcrypto` extension is enabled for `gen_random_uuid()`:
+
+```sql
+create extension if not exists pgcrypto;
+```
+
+### 12.2 Row Level Security (RLS) quickstart
+
+Enable RLS on tables and add minimal policies so the public site can read published content while writes remain restricted. Adjust to your needs.
+
+Public reads for published posts and active taxonomy:
+
+```sql
+alter table posts enable row level security;
+alter table categories enable row level security;
+alter table tags enable row level security;
+alter table comments enable row level security;
+
+-- Read published posts
+create policy "read_published_posts" on posts
+for select using (status = 'published');
+
+-- Read active categories/tags
+create policy "read_active_categories" on categories
+for select using (status = 'active');
+
+create policy "read_active_tags" on tags
+for select using (status = 'active');
+
+-- Read only approved comments
+create policy "read_approved_comments" on comments
+for select using (status = 'approved');
+```
+
+Authenticated author/editor writes (example; adapt to your auth model):
+
+```sql
+-- Allow authenticated users to insert/update their own posts
+create policy "insert_posts_auth" on posts
+for insert to authenticated with check (auth.uid() = author_id);
+
+create policy "update_posts_auth" on posts
+for update to authenticated using (auth.uid() = author_id);
+
+-- Categories/Tags writes could be limited to a role or specific users
+-- Consider using Postgres roles or a custom claim to gatekeep admin areas
+```
+
+Note: For production, design policies carefully (draft visibility, moderation, etc.).
+
+### 12.3 Query shapes expected by components
+
+The UI uses Supabase queries that return nested relations. Ensure your selects match these shapes.
+
+Single post by id with author, category, tags and comments:
+
+```js
+const { data: post } = await supabase
+	.from('posts')
+	.select(
+		`
+		id, title, slug, content, excerpt, featured_image, featured, read_time,
+		status, views, published_at,
+		author:profiles(id, name, email, company_role, avatar),
+		category:categories(id, name, slug, color),
+		post_tags(tag:tags(id, name, slug, color)),
+		comments:comments(id, content, author_name, author_email, status, created_at)
+	`
+	)
+	.eq('id', blogId)
+	.single()
+```
+
+Posts list (homepage/blog list):
+
+```js
+const { data: posts } = await supabase
+	.from('posts')
+	.select(
+		`
+		id, title, slug, excerpt, featured_image, featured, read_time,
+		status, views, published_at,
+		author:profiles(id, name, avatar),
+		category:categories(id, name, slug, color),
+		post_tags(tag:tags(id, name, slug))
+	`
+	)
+	.order('published_at', { ascending: false })
+```
+
+Tags with related posts (many-to-many via `post_tags`):
+
+```js
+const { data: tag } = await supabase
+	.from('tags')
+	.select(
+		`
+		id, name, slug, description, color,
+		post_tags(
+			post:posts(
+				id, title, slug, excerpt, featured_image, status, published_at
+			)
+		)
+	`
+	)
+	.eq('id', id)
+	.single()
+```
+
+Related posts (example: same category, exclude current):
+
+```js
+const { data: related } = await supabase
+	.from('posts')
+	.select(
+		'id, title, slug, excerpt, featured_image, read_time, views, published_at, category:categories(id, name)'
+	)
+	.eq('category_id', categoryId)
+	.neq('id', currentPostId)
+	.eq('status', 'published')
+	.limit(6)
+```
+
+These examples rely on FKs in the schema to auto-generate PostgREST relationships (aliases like `author:profiles` use `author_id` → `profiles.id`). If your names differ, adjust the aliases accordingly.
