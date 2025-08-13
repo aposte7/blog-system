@@ -1,5 +1,4 @@
 'use client'
-import { blogPosts } from '@/data'
 import Link from 'next/link'
 import BlogCard, {
 	BlogCardAuthor,
@@ -14,13 +13,15 @@ import Image from 'next/image'
 import { Calendar, Clock, Eye } from 'lucide-react'
 import { usePosts } from './usePosts'
 import { dateToString } from '@/lib/utils'
+import { Loading } from '../Loading'
+import Empty from '../Empty'
 
 const BlogPostList = () => {
 	const { isLoading, posts } = usePosts()
 
 	if (isLoading) return <Loading message="Loading latest posts..." />
 
-	if (featuredPosts.length === 0) {
+	if (posts.length === 0) {
 		return (
 			<Empty title="No Posts Yet">
 				<p className="text-sm text-muted-foreground max-w-sm">

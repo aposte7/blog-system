@@ -14,6 +14,7 @@ import { Calendar, Clock, Eye } from 'lucide-react'
 import { usePosts } from './usePosts'
 import { Loading } from '../Loading'
 import Empty from '../Empty'
+import { dateToString } from '@/lib/utils'
 
 const BlogFeaturedList = () => {
 	const { isLoading, posts } = usePosts()

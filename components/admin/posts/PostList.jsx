@@ -60,7 +60,9 @@ const PostList = () => {
 										</span>
 									</TableData>
 									<TableData>
-										<OpenModal name="change-featured">
+										<OpenModal
+											name={`change-featured-${post.slug}`}
+										>
 											<button
 												className={`rounded-sm mt-2 h-full inline-flex items-end text-center text-xs font-semibold  ${
 													post.featured
@@ -76,7 +78,7 @@ const PostList = () => {
 										</OpenModal>
 
 										<ViewModal
-											name="change-featured"
+											name={`change-featured-${post.slug}`}
 											title="Confirm Your Action"
 											titleClass="text-sm"
 										>

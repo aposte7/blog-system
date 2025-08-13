@@ -10,6 +10,7 @@ export function useDeletePost() {
 		onSuccess: (data) => {
 			toast.success('Post successfully Deleted')
 			queryClient.invalidateQueries(['posts'])
+			queryClient.invalidateQueries(['recent-posts'])
 		},
 		onError: (err) => {
 			const message =

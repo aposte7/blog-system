@@ -17,8 +17,9 @@ export async function getPosts() {
       updated_at,
 	  featured,
       author:profiles(id, name, email, company_role),
-      category:categories(id, name, slug),
-      post_tags(tag:tags(id, name, slug))
+      category:categories(id, name, slug,color),
+      post_tags(tag:tags(id, name, slug,color)),
+	  read_time
     `
 		)
 		.order('created_at', { ascending: false })
@@ -26,6 +27,33 @@ export async function getPosts() {
 	if (error) throw error
 	console.log(data)
 	return data
+}
+export async function getRecentPosts() {
+	const { data, error } = await supabaseClient
+		.from('posts')
+		.select(
+			`
+      id,
+      title,
+      slug,
+      excerpt,
+      featured_image,
+      status,
+      views,
+      published_at,
+      updated_at,
+	  featured,
+      author:profiles(id, name, email, company_role),
+      category:categories(id, name, slug,color),
+      post_tags(tag:tags(id, name, slug,color)),
+	  read_time
+    `
+		)
+		.order('created_at', { ascending: false })
+		.limit(3)
+
+	if (error) throw error
+	return data || []
 }
 
 export async function getPostById(id) {
@@ -46,9 +74,10 @@ export async function getPostById(id) {
       created_at,
       updated_at,
       author:profiles(id, name, email, company_role, avatar),
-      category:categories(id, name, slug),
-      post_tags(tag:tags(id, name, slug)),
-      comments(id, content, author_name, author_email, parent_id, status)
+      category:categories(id, name, slug,color),
+      post_tags(tag:tags(id, name, slug,color)),
+      comments(id, content, author_name, author_email, parent_id, status),
+	  read_time
     `
 		)
 		.eq('id', id)
@@ -123,6 +152,7 @@ export async function createPost(
 		publishDate,
 		media = [],
 		tags = [],
+		read_time,
 	},
 	id // optional, if provided → update mode
 ) {
@@ -145,6 +175,7 @@ export async function createPost(
 				category_id: category,
 				published_at: publishDate,
 				updated_at: new Date().toISOString(),
+				read_time,
 			})
 			.eq('id', id)
 			.select()

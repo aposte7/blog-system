@@ -25,6 +25,10 @@ const postSchema = z.object({
 	featuredImage: z.string().url('Must be a valid URL'),
 	content: z.string().min(1, 'Content is required'),
 	tags: z.array(z.string()).optional(),
+	read_time: z.preprocess(
+		(val) => Number(val),
+		z.number().int().min(3, 'Read time must be greater than 2')
+	),
 })
 
 function CreatePost({ closeModal, postData }) {
@@ -68,6 +72,7 @@ function CreatePost({ closeModal, postData }) {
 			featuredImage: postData?.featured_image || '',
 			content: postData?.content || '# hello write your blog here',
 			tags: [],
+			read_time: postData?.read_time || 3,
 		},
 	})
 
@@ -99,23 +104,40 @@ function CreatePost({ closeModal, postData }) {
 				onSubmit={handleSubmit(onSubmit)}
 				className="space-y-4 rounded-md"
 			>
-				<div>
-					<label className="mb-1 block text-sm font-medium">
-						Title *
-					</label>
-					<input
-						{...register('title')}
-						type="text"
-						placeholder="Enter post title..."
-						className="w-full rounded-md border border-gray-300 px-4 py-2"
-					/>
-					{errors.title && (
-						<p className="text-red-500 text-xs">
-							{errors.title.message}
-						</p>
-					)}
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+					<div>
+						<label className="mb-1 block text-sm font-medium">
+							Title *
+						</label>
+						<input
+							{...register('title')}
+							type="text"
+							placeholder="Enter post title..."
+							className="w-full rounded-md border border-gray-300 px-4 py-2"
+						/>
+						{errors.title && (
+							<p className="text-red-500 text-xs">
+								{errors.title.message}
+							</p>
+						)}
+					</div>
+					<div>
+						<label className="mb-1 block text-sm font-medium">
+							Read Time *
+						</label>
+						<input
+							{...register('read_time')}
+							type="number"
+							placeholder="Enter post read time..."
+							className="w-full rounded-md border border-gray-300 px-4 py-2"
+						/>
+						{errors.read_time && (
+							<p className="text-red-500 text-xs">
+								{errors.read_time.message}
+							</p>
+						)}
+					</div>
 				</div>
-
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div>
 						<label className="mb-1 block text-sm font-medium">
@@ -174,7 +196,6 @@ function CreatePost({ closeModal, postData }) {
 						)}
 					</div>
 				</div>
-
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div>
 						<label className="mb-1 block text-sm font-medium">
@@ -227,7 +248,6 @@ function CreatePost({ closeModal, postData }) {
 						)}
 					</div>
 				</div>
-
 				<div>
 					<label className="mb-1 block text-sm font-medium">
 						Tags
@@ -278,7 +298,6 @@ function CreatePost({ closeModal, postData }) {
 						))}
 					</div>
 				</div>
-
 				<div>
 					<label className="mb-1 block text-sm font-medium">
 						Excerpt
@@ -289,7 +308,6 @@ function CreatePost({ closeModal, postData }) {
 						className="min-h-[100px] w-full resize-y rounded-md border border-gray-300 px-4 py-2"
 					/>
 				</div>
-
 				<div>
 					<label className="mb-1 block text-sm font-medium">
 						Upload Images
@@ -354,7 +372,6 @@ function CreatePost({ closeModal, postData }) {
 						</div>
 					)}
 				</div>
-
 				{/* Featured Image */}
 				<div>
 					<label className="mb-1 block text-sm font-medium">
@@ -372,7 +389,6 @@ function CreatePost({ closeModal, postData }) {
 						</p>
 					)}
 				</div>
-
 				{/* Markdown Content */}
 				<div className="md:col-span-2">
 					<label className="mb-1 block text-sm font-medium">
@@ -396,7 +412,6 @@ function CreatePost({ closeModal, postData }) {
 						</p>
 					)}
 				</div>
-
 				{/* Submit */}
 				<div className="flex justify-end">
 					<button

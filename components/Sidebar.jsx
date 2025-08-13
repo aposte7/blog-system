@@ -1,22 +1,32 @@
+'use client'
+
+import { cn } from '@/lib/utils'
 import {
 	LayoutDashboard,
-	ChartColumn,
 	StickyNote,
 	ShieldUser,
 	Folder,
 	MessageCircleIcon,
 	Tag,
-	Notebook,
-	StickyNoteIcon,
-	NotepadText,
-	NotepadTextIcon,
 } from 'lucide-react'
 
-import { default as Link } from 'next/link'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const Sidebar = () => {
+	const pathname = usePathname()
+
+	const linkClasses = (href) =>
+		cn(
+			'inline-flex w-full items-center gap-3 rounded px-3 py-1.5 text-sm transition-colors',
+			pathname === href
+				? 'bg-primary text-white font-medium'
+				: 'text-slate-500 hover:bg-primary/80 hover:text-white'
+		)
+
 	return (
 		<aside className="space-y-12 overflow-y-scroll bg-white px-4 py-4 sm:px-8">
+			{/* Logo / Title */}
 			<h2 className="inline-flex items-center gap-3 text-3xl font-bold">
 				<LayoutDashboard
 					size="1.3em"
@@ -25,14 +35,12 @@ const Sidebar = () => {
 				Admin
 			</h2>
 
+			{/* Overview */}
 			<div className="space-y-1">
 				<div className="pb-2 text-xs font-medium text-slate-500 uppercase">
 					OVERVIEW
 				</div>
-				<Link
-					href="/admin"
-					className="inline-flex w-full items-center gap-3 rounded px-3 py-1.5 text-sm text-slate-500 hover:bg-purple-500 hover:text-white active:bg-purple-500 active:font-medium"
-				>
+				<Link href="/admin" className={linkClasses('/admin')}>
 					<LayoutDashboard
 						size="1.3em"
 						className="rounded-md text-inherit"
@@ -41,13 +49,14 @@ const Sidebar = () => {
 				</Link>
 			</div>
 
+			{/* Content */}
 			<div className="space-y-1">
 				<div className="pb-2 text-xs font-medium text-slate-500 uppercase">
-					content
+					Content
 				</div>
 				<Link
 					href="/admin/posts"
-					className="inline-flex w-full items-center gap-3 rounded px-3 py-1.5 text-sm text-slate-500 hover:bg-purple-500 hover:text-white active:bg-purple-500 active:font-medium"
+					className={linkClasses('/admin/posts')}
 				>
 					<StickyNote
 						size="1.3em"
@@ -56,8 +65,8 @@ const Sidebar = () => {
 					Posts
 				</Link>
 				<Link
-					href="/admin/posts"
-					className="inline-flex w-full items-center gap-3 rounded px-3 py-1.5 text-sm text-slate-500 hover:bg-purple-500 hover:text-white active:bg-purple-500 active:font-medium"
+					href="/admin/comments"
+					className={linkClasses('/admin/comments')}
 				>
 					<MessageCircleIcon
 						size="1.3em"
@@ -67,26 +76,25 @@ const Sidebar = () => {
 				</Link>
 				<Link
 					href="/admin/categories"
-					className="inline-flex w-full items-center gap-3 rounded px-3 py-1.5 text-sm text-slate-500 hover:bg-purple-500 hover:text-white active:bg-purple-500 active:font-medium"
+					className={linkClasses('/admin/categories')}
 				>
 					<Folder size="1.3em" className="rounded-md text-inherit" />
 					Categories
 				</Link>
-				<Link
-					href="/admin/tags"
-					className="inline-flex w-full items-center gap-3 rounded px-3 py-1.5 text-sm text-slate-500 hover:bg-purple-500 hover:text-white active:bg-purple-500 active:font-medium"
-				>
+				<Link href="/admin/tags" className={linkClasses('/admin/tags')}>
 					<Tag size="1.3em" className="rounded-md text-inherit" />
 					Tags
 				</Link>
 			</div>
+
+			{/* Management */}
 			<div className="space-y-1">
 				<div className="pb-2 text-xs font-medium text-slate-500 uppercase">
 					Management
 				</div>
 				<Link
 					href="/admin/admins"
-					className="inline-flex w-full items-center gap-3 rounded px-3 py-1.5 text-sm text-slate-500 hover:bg-purple-500 hover:text-white active:bg-purple-500 active:font-medium"
+					className={linkClasses('/admin/admins')}
 				>
 					<ShieldUser
 						size="1.3em"

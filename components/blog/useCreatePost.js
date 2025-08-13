@@ -16,6 +16,7 @@ export function useCreatePost() {
 			}
 
 			queryClient.invalidateQueries(['posts'])
+			queryClient.invalidateQueries(['recent-posts'])
 		},
 		onError: (err) => {
 			const message =
