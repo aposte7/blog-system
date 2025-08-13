@@ -68,15 +68,39 @@ export async function updatePost(postId, updates) {
 	return data
 }
 
-export async function deletePost(postId) {
-	const { data, error } = await supabaseClient
+export async function deletePost(id) {
+	if (!id) throw new Error('Post ID is required')
+
+	const { data: existingPost, error: fetchError } = await supabaseClient
+		.from('posts')
+		.select('id')
+		.eq('id', id)
+		.single()
+
+	if (fetchError) throw fetchError
+	if (!existingPost) throw new Error('Post not found')
+
+	const { error: tagsError } = await supabaseClient
+		.from('post_tags')
+		.delete()
+		.eq('post_id', id)
+	if (tagsError) throw tagsError
+
+	const { error: mediaError } = await supabaseClient
+		.from('post_media')
+		.delete()
+		.eq('post_id', id)
+	if (mediaError) throw mediaError
+
+	const { data, error: postError } = await supabaseClient
 		.from('posts')
 		.delete()
-		.eq('id', postId)
+		.eq('id', id)
 		.select()
 		.single()
 
-	if (error) throw error
+	if (postError) throw postError
+
 	return data
 }
 

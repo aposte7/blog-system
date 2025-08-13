@@ -1,15 +1,26 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deletePost } from '../services/postApi'
+import { deletePost as deletePostApi } from '../services/postApi'
+import { toast } from 'sonner'
 
 export function useDeletePost() {
 	const queryClient = useQueryClient()
 
-	const { mutate: deletePostApi, isLoading: isDeleting } = useMutation({
-		mutationFn: (id) => deletePost(id),
-		onSuccess: () => {
+	const { mutate: deletePost, isLoading: isDeleting } = useMutation({
+		mutationFn: (id) => deletePostApi(id),
+		onSuccess: (data) => {
+			toast.success('Post successfully Deleted')
 			queryClient.invalidateQueries(['posts'])
+		},
+		onError: (err) => {
+			const message =
+				typeof err === 'string'
+					? err
+					: err?.message ||
+					  'Something went wrong while deleting the pot'
+			toast.error(message)
+			console.error(err)
 		},
 	})
 
-	return { isDeleting, deletePostApi }
+	return { isDeleting, deletePost }
 }

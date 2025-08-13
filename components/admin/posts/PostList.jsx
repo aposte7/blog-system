@@ -1,8 +1,10 @@
 'use client'
 import CreatePost from '@/components/blog/CreatePost'
+import { useDeletePost } from '@/components/blog/useDeletePost'
 import { usePosts } from '@/components/blog/usePosts'
 import Menus from '@/components/Menu'
 import Modal, { OpenModal, ViewModal } from '@/components/Modal'
+import PopupConfirm from '@/components/PopupConfirm'
 import TableWrapper, {
 	Table,
 	TableContainer,
@@ -14,8 +16,10 @@ import { Delete, Edit, Ellipsis, Trash } from 'lucide-react'
 
 const PostList = () => {
 	const { posts, isLoading } = usePosts()
+	const { isDeleting, deletePost } = useDeletePost()
 
-	if (isLoading) return <p className="h-full w-full mx-auto">Loading...</p>
+	if (isLoading || isDeleting)
+		return <p className="h-full w-full mx-auto">Loading...</p>
 
 	return (
 		<TableWrapper>
@@ -41,9 +45,11 @@ const PostList = () => {
 									</div>
 								</TableData>
 								<TableData>
-									{post.author?.name || '...'}
+									{post.author?.name || '....'}
 								</TableData>
-								<TableData>{post.category.name}</TableData>
+								<TableData>
+									{post.category?.name || '....'}
+								</TableData>
 								<TableData>
 									<span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700">
 										{post.status}
@@ -76,13 +82,16 @@ const PostList = () => {
 														<Edit size={15} /> Edit
 													</Menus.Button>
 												</OpenModal>
-												<Menus.Button className="text-danger">
-													<Trash
-														className="text-inherit"
-														size={15}
-													/>
-													Delete
-												</Menus.Button>
+
+												<OpenModal name="delete-post">
+													<Menus.Button className="text-danger">
+														<Trash
+															className="text-inherit"
+															size={15}
+														/>
+														Delete
+													</Menus.Button>
+												</OpenModal>
 											</Menus.MenuViews>
 
 											<ViewModal
@@ -90,6 +99,30 @@ const PostList = () => {
 												name="edit-post"
 											>
 												<CreatePost postData={post} />
+											</ViewModal>
+
+											<ViewModal
+												title="Confirm  Your Action"
+												name="delete-post"
+												titleClass="text-sm"
+											>
+												<PopupConfirm
+													onConfirm={() =>
+														deletePost(post.id)
+													}
+													message={
+														<>
+															Are you sure you
+															want to delete the
+															post{' '}
+															<strong>
+																"{post.slug}"
+															</strong>
+															? This action cannot
+															be undone.
+														</>
+													}
+												/>
 											</ViewModal>
 										</Menus>
 									</Modal>
