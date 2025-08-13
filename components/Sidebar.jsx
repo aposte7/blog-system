@@ -93,8 +93,8 @@ const Sidebar = () => {
 					Management
 				</div>
 				<Link
-					href="/admin/admins"
-					className={linkClasses('/admin/admins')}
+					href="/admin/users"
+					className={linkClasses('/admin/users')}
 				>
 					<ShieldUser
 						size="1.3em"
