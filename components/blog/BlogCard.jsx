@@ -95,12 +95,12 @@ const BlogCardExcerpt = ({ excerpt, className = '' }) => {
 const BlogCardTags = ({ tags, className = '' }) => {
 	return (
 		<div className={cn('blog-tags flex flex-wrap gap-2', className)}>
-			{tags.map((postTag) => (
+			{tags.map((postTag, index) => (
 				<p
-					key={postTag.id}
+					key={`${postTag.tag?.id}-${index}`}
 					className="rounded-full border border-border text-foreground px-2 text-sm"
 				>
-					{postTag.name}
+					{postTag.tag?.name}
 				</p>
 			))}
 		</div>

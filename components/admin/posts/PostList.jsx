@@ -130,6 +130,22 @@ const PostList = () => {
 							</TableRow>
 						))}
 				</TableContainer>
+				<TableContainer elm="tfoot">
+					<TableRow>
+						<TableData
+							elm="td"
+							colSpan={8}
+							className="py-2 px-4 text-sm text-gray-500"
+						>
+							<div className="flex justify-between items-center">
+								<span>Total: {posts.length} categories</span>
+								<span className="text-xs">
+									Last updated: {posts.updated_at || ''}
+								</span>
+							</div>
+						</TableData>
+					</TableRow>
+				</TableContainer>
 			</Table>
 		</TableWrapper>
 	)

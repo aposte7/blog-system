@@ -38,14 +38,14 @@ const TableRow = ({ children, className = '' }) => {
 	)
 }
 
-const TableData = ({ elm = 'td', children, className = '' }) => {
+const TableData = ({ elm = 'td', children, className = '', ...props }) => {
 	const baseClass =
 		elm === 'td'
 			? 'px-4 py-3 align-middle'
 			: 'h-12 px-4 text-left align-middle font-medium text-slate-600'
 	return createElement(
 		elm,
-		{ className: `${baseClass} ${className}` },
+		{ className: `${baseClass} ${className}`, ...props },
 		children
 	)
 }

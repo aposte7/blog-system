@@ -17,10 +17,9 @@ import { dateToString } from '@/lib/utils'
 
 const BlogPostList = () => {
 	const { isLoading, posts } = usePosts()
+	console.log(posts)
 
 	if (isLoading) return <h4>Loading...</h4>
-
-	console.log(posts)
 
 	return (
 		<div className="card-container grid grid-cols-[minmax(22rem,30rem)] justify-evenly gap-8 min-[50rem]:grid-cols-[minmax(22rem,30rem)_minmax(22rem,30rem)] xl:grid-cols-3">
@@ -28,7 +27,7 @@ const BlogPostList = () => {
 				<Link key={article.id} href={`/blog/${article.id}`}>
 					<BlogCard>
 						<Image
-							src="/600x400.svg"
+							src={article.featured_image}
 							alt="Blog image"
 							className=" object-cover w-full h-[14rem] transition-transform duration-500 group-hover:scale-105"
 							width={400}
@@ -38,7 +37,7 @@ const BlogPostList = () => {
 						<BlogCardBodyWrapper>
 							<BlogCardBody>
 								<p className="inline-flex rounded-full bg-[#aeddffee] px-3 py-px text-sm text-foreground">
-									{article.category.name}
+									{article?.category?.name || 'unknown'}
 								</p>
 
 								<BlogCardTitle title={article.title} />
@@ -52,7 +51,10 @@ const BlogPostList = () => {
 							<BlogCardAuthor>
 								<Image
 									src={'/600x400.svg'}
-									alt={article.author.name}
+									alt={
+										article.author?.name ||
+										'author image place holder'
+									}
 									width={40}
 									height={40}
 									className="rounded-full h-10 w-10 object-top object-cover"
@@ -62,7 +64,8 @@ const BlogPostList = () => {
 										{article.author.name}
 									</p>
 									<p className="text-sm text-muted-foreground">
-										{article.author.email}
+										{article.author.email ||
+											article.author.email}
 									</p>
 								</div>
 							</BlogCardAuthor>
