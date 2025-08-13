@@ -17,7 +17,7 @@ function useDeleteTags() {
 				typeof err === 'string'
 					? err
 					: err?.message ||
-					  'Something went wrong while saving the tag'
+					  'Something went wrong while deleting the tag'
 			toast.error(message)
 			console.error(err)
 		},

@@ -108,6 +108,7 @@ function TagList() {
 										>
 											<CreateTag tagData={tag} />
 										</ViewModal>
+
 										<ViewModal
 											title="Confirm  Your Action"
 											name="delete-tag"

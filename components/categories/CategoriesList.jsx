@@ -1,20 +1,24 @@
 'use client'
+
+import { Edit, Ellipsis, Folder, Trash } from 'lucide-react'
+import Menus from '../Menu'
+import Modal, { OpenModal, ViewModal } from '../Modal'
 import TableWrapper, {
 	Table,
 	TableContainer,
 	TableData,
 	TableRow,
-} from '@/components/Table'
-import { Edit, Ellipsis, Folder, Trash } from 'lucide-react'
+} from '../Table'
 import { useCategories } from './useCategories'
-import Modal, { OpenModal, ViewModal } from '../Modal'
-import Menus from '../Menu'
+import useDeleteCategory from './useDeleteCategory'
 import CreateCategory from './CreateCategory'
+import PopupConfirm from '../PopupConfirm'
 
 function CategoriesList() {
 	const { categories, isLoading } = useCategories()
+	const { deleteCategory, isDeleting } = useDeleteCategory()
 
-	if (isLoading) return <h1>Loading...</h1>
+	if (isLoading || isDeleting) return <h1>Loading...</h1>
 	return (
 		<TableWrapper>
 			<Table>
@@ -65,7 +69,7 @@ function CategoriesList() {
 							<TableData className="relative z-50">
 								<Modal>
 									<Menus>
-										<Menus.Toggle id="category-action">
+										<Menus.Toggle id="tag-action">
 											<button
 												className="rounded-sm px-1 py-1 transition-colors hover:bg-card"
 												aria-label="More options"
@@ -78,28 +82,54 @@ function CategoriesList() {
 										</Menus.Toggle>
 										<Menus.MenuViews
 											className="absolute  overflow-visible -top-[100%] left-0"
-											id="category-action"
+											id="tag-action"
 										>
 											<OpenModal name="edit-category">
 												<Menus.Button>
 													<Edit size={15} /> Edit
 												</Menus.Button>
 											</OpenModal>
-											<Menus.Button className="text-danger">
-												<Trash
-													className="text-inherit"
-													size={15}
-												/>
-												Delete
-											</Menus.Button>
+
+											<OpenModal name="delete-category">
+												<Menus.Button className="text-danger">
+													<Trash
+														className="text-inherit"
+														size={15}
+													/>
+													Delete
+												</Menus.Button>
+											</OpenModal>
 										</Menus.MenuViews>
 
 										<ViewModal
-											title="Edit Post"
+											title="Edit Category"
 											name="edit-category"
 										>
 											<CreateCategory
 												categoryData={category}
+											/>
+										</ViewModal>
+
+										<ViewModal
+											title="Confirm  Your Action"
+											name="delete-category"
+											titleClass="text-sm"
+										>
+											<PopupConfirm
+												onConfirm={() =>
+													deleteCategory(category.id)
+												}
+												message={
+													<>
+														Are you sure you want to
+														delete the category{' '}
+														<strong>
+															"{category.slug}"
+														</strong>
+														? This action cannot be
+														undone.
+													</>
+												}
 											/>
 										</ViewModal>
 									</Menus>
