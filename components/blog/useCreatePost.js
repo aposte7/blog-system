@@ -9,6 +9,7 @@ export function useCreatePost() {
 		mutationFn: ({ newPost, id }) => createPostApi(newPost, id),
 		onSuccess: (data, variables) => {
 			if (variables?.id) {
+				queryClient.invalidateQueries(['post', variables.id])
 				toast.success('Post successfully updated!')
 			} else {
 				toast.success('New post successfully created!')

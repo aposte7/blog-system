@@ -17,10 +17,19 @@ import { dateToString } from '@/lib/utils'
 
 const BlogPostList = () => {
 	const { isLoading, posts } = usePosts()
-	console.log(posts)
 
-	if (isLoading) return <h4>Loading...</h4>
+	if (isLoading) return <Loading message="Loading latest posts..." />
 
+	if (featuredPosts.length === 0) {
+		return (
+			<Empty title="No Posts Yet">
+				<p className="text-sm text-muted-foreground max-w-sm">
+					It seems there are no articles right now. Please check back
+					later or explore other sections of our website.
+				</p>
+			</Empty>
+		)
+	}
 	return (
 		<div className="card-container grid grid-cols-[minmax(22rem,30rem)] justify-evenly gap-8 min-[50rem]:grid-cols-[minmax(22rem,30rem)_minmax(22rem,30rem)] xl:grid-cols-3">
 			{posts.map((article, i) => (

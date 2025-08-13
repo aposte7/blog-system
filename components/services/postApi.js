@@ -15,6 +15,7 @@ export async function getPosts() {
       views,
       published_at,
       updated_at,
+	  featured,
       author:profiles(id, name, email, company_role),
       category:categories(id, name, slug),
       post_tags(tag:tags(id, name, slug))
@@ -38,6 +39,7 @@ export async function getPostById(id) {
       content,
       excerpt,
       featured_image,
+	  featured,
       status,
       views,
       published_at,
@@ -56,12 +58,17 @@ export async function getPostById(id) {
 	return data
 }
 
-export async function updatePost(postId, updates) {
+export async function updatePostFeatured(postId, featured) {
+	if (!postId) throw new Error('Post ID is required')
+
 	const { data, error } = await supabaseClient
 		.from('posts')
-		.update(updates)
+		.update({
+			featured,
+			updated_at: new Date().toISOString(),
+		})
 		.eq('id', postId)
-		.select()
+		.select('id, featured')
 		.single()
 
 	if (error) throw error
