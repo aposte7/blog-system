@@ -1,5 +1,6 @@
 'use client'
 import Empty from '../Empty'
+import MarkdownEditor from '@uiw/react-md-editor'
 import { BlogRecentPosts, BlogSideBar, BlogSubscribe } from './BlogHome'
 import {
 	ArrowLeft,
@@ -134,7 +135,11 @@ const BlogDetailPage = ({ params }) => {
 									className="w-full h-[400px] object-cover"
 								/>
 							</div>
-							<div>{post.content}</div>
+							<div data-color-mode="light" className="bg-card">
+								<MarkdownEditor.Markdown
+									source={post.content}
+								/>
+							</div>
 
 							<div className="flex items-center justify-between">
 								<div className="flex items-center space-x-4">
