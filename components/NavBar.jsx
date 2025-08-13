@@ -5,7 +5,7 @@ function NavBar() {
 	return (
 		<nav className="h-16 ">
 			<div className="fixed top-0 left-0 z-50 flex w-full items-center justify-between border-b border-b-border/50 bg-primary-foreground/20 px-8 py-4 backdrop-blur-xl">
-				<div className="text-3xl font-medium text-primary">Zemenay</div>
+				<div className="text-3xl font-medium text-primary">Logo</div>
 
 				<input type="checkbox" id="hamburger" className="peer hidden" />
 

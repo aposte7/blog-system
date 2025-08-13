@@ -6,7 +6,7 @@ import { BlogRecentPosts } from '../blog/BlogHome'
 import { useTotalComments, useTotalPosts, useTotalViews } from '../useHelpers'
 import { Loading } from '../Loading'
 
-const Home = () => {
+const HomePage = () => {
 	const { totalPosts, isLoading: loadingPosts } = useTotalPosts()
 	const { totalComments, isLoading: loadingComments } = useTotalComments()
 	const { totalViews, isLoading: loadingViews } = useTotalViews()
@@ -122,4 +122,4 @@ const Home = () => {
 	)
 }
 
-export default Home
+export default HomePage

@@ -2,6 +2,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser } from './useUser'
+import { Loading } from './Loading'
 
 function ProtectedRoute({ children }) {
 	const { user, isLoading, isAuthenticated } = useUser()
@@ -14,11 +15,7 @@ function ProtectedRoute({ children }) {
 	}, [isLoading, isAuthenticated, router])
 
 	if (isLoading) {
-		return (
-			<div className="flex items-center justify-center min-h-screen bg-gray-50">
-				<span className="text-gray-600">Loading...</span>
-			</div>
-		)
+		return <Loading />
 	}
 
 	if (!isAuthenticated) return null

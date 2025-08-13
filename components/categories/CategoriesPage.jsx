@@ -3,7 +3,7 @@ import Modal, { OpenModal, ViewModal } from '../Modal'
 import CreateCategory from './CreateCategory'
 import CategoriesList from './CategoriesList'
 
-function Categories() {
+function CategoriesPage() {
 	return (
 		<div className="p-6">
 			<div className="grid grid-cols-[max-content_auto] grid-rows-2 items-start justify-between gap-x-10">
@@ -76,4 +76,4 @@ function Categories() {
 	)
 }
 
-export default Categories
+export default CategoriesPage

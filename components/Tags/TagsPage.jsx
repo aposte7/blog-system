@@ -3,7 +3,7 @@ import Modal, { OpenModal, ViewModal } from '../Modal'
 import CreateTag from './CreateTag'
 import TagList from './TagList'
 
-function Tags() {
+function TagsPage() {
 	return (
 		<div className="p-6">
 			<div className="grid grid-cols-[max-content_auto] grid-rows-2 items-start justify-between gap-x-10">
@@ -70,4 +70,4 @@ function Tags() {
 	)
 }
 
-export default Tags
+export default TagsPage

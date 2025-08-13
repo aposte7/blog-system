@@ -1,5 +1,7 @@
 import ComingSoon from '../ComingSoon'
 
-export const Users = () => {
+const CommentPage = () => {
 	return <ComingSoon />
 }
+
+export default CommentPage

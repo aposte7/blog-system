@@ -3,6 +3,7 @@ import CreatePost from '@/components/blog/CreatePost'
 import { useDeletePost } from '@/components/blog/useDeletePost'
 import { usePosts } from '@/components/blog/usePosts'
 import { useUpdatePostFeatured } from '@/components/blog/useUpdatePostFeatured'
+import { Loading } from '@/components/Loading'
 import Menus from '@/components/Menu'
 import Modal, { OpenModal, ViewModal } from '@/components/Modal'
 import PopupConfirm from '@/components/PopupConfirm'
@@ -20,8 +21,7 @@ const PostList = () => {
 	const { isDeleting, deletePost } = useDeletePost()
 	const { isUpdating, updatePostFeaturedStatus } = useUpdatePostFeatured()
 
-	if (isLoading || isDeleting || isUpdating)
-		return <p className="h-full w-full mx-auto">Loading...</p>
+	if (isLoading || isDeleting || isUpdating) return <Loading />
 
 	return (
 		<Modal>
