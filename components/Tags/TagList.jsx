@@ -1,5 +1,5 @@
 'use client'
-import { Ellipsis, Tag } from 'lucide-react'
+import { Edit, Ellipsis, Tag, Trash } from 'lucide-react'
 import TableWrapper, {
 	Table,
 	TableContainer,
@@ -7,6 +7,9 @@ import TableWrapper, {
 	TableRow,
 } from '../Table'
 import { useTags } from './useTags'
+import Modal, { OpenModal, ViewModal } from '../Modal'
+import Menus from '../Menu'
+import CreateTag from './CreateTag'
 
 function TagList() {
 	const { isLoading, tags } = useTags()
@@ -61,8 +64,46 @@ function TagList() {
 								</span>
 							</TableData>
 
-							<TableData>
-								<Ellipsis />
+							<TableData className="relative z-50">
+								<Modal>
+									<Menus>
+										<Menus.Toggle id="tag-action">
+											<button
+												className="rounded-sm px-1 py-1 transition-colors hover:bg-card"
+												aria-label="More options"
+											>
+												<Ellipsis
+													size={15}
+													className="text-muted-foreground"
+												/>
+											</button>
+										</Menus.Toggle>
+										<Menus.MenuViews
+											className="absolute  overflow-visible -top-[100%] left-0"
+											id="tag-action"
+										>
+											<OpenModal name="edit-tag">
+												<Menus.Button>
+													<Edit size={15} /> Edit
+												</Menus.Button>
+											</OpenModal>
+											<Menus.Button className="text-danger">
+												<Trash
+													className="text-inherit"
+													size={15}
+												/>
+												Delete
+											</Menus.Button>
+										</Menus.MenuViews>
+
+										<ViewModal
+											title="Edit Tag"
+											name="edit-tag"
+										>
+											<CreateTag tagData={tag} />
+										</ViewModal>
+									</Menus>
+								</Modal>
 							</TableData>
 						</TableRow>
 					))}

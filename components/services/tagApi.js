@@ -38,27 +38,27 @@ export async function getTagsWithPosts(id) {
 	return data
 }
 
-export async function createTags({ name, slug, description }) {
-	const { data, error } = await supabaseClient
-		.from('tags')
-		.insert([{ name, slug, description, color }])
-		.select()
-		.single()
+export async function createTags({ name, slug, description }, id) {
+	console.log(name, slug, description, id)
+	// if (id) {
+	// 	const { data, error } = await supabaseClient
+	// 		.from('tags')
+	// 		.update({ name, slug, description, color })
+	// 		.eq('id', id)
+	// 		.select()
+	// 		.single()
 
-	if (error) throw error
-	return data
-}
-
-export async function updateTags(tagId, updates) {
-	const { data, error } = await supabaseClient
-		.from('tags')
-		.update(updates)
-		.eq('id', tagId)
-		.select()
-		.single()
-
-	if (error) throw error
-	return data
+	// 	if (error) throw error
+	// 	return data
+	// } else {
+	// 	const { data, error } = await supabaseClient
+	// 		.from('tags')
+	// 		.insert([{ name, slug, description, color }])
+	// 		.select()
+	// 		.single()
+	// 	if (error) throw error
+	// 	return data
+	// }
 }
 
 export async function deleteCategory(tagId) {

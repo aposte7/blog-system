@@ -9,7 +9,7 @@ export function useCreateCategories() {
 		mutationFn: ({ newCategory, id }) =>
 			CreateCategoriesApi(newCategory, id),
 		onSuccess: (data, variables) => {
-			if (!variables.id) {
+			if (!variables?.id) {
 				toast.success('New Category successfully created!')
 			} else {
 				toast.success(' Category successfully Updated!')
@@ -18,7 +18,15 @@ export function useCreateCategories() {
 			queryClient.invalidateQueries(['categories'])
 		},
 
-		onError: (err) => toast.error(err.message),
+		onError: (err) => {
+			const message =
+				typeof err === 'string'
+					? err
+					: err?.message ||
+					  'Something went wrong while saving the category'
+			toast.error(message)
+			console.error(err)
+		},
 	})
 
 	return { isCreating, createCategories }

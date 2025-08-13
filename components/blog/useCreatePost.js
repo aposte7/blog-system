@@ -8,7 +8,7 @@ export function useCreatePost() {
 	const { mutate: createPost, isLading: isCreating } = useMutation({
 		mutationFn: ({ newPost, id }) => createPostApi(newPost, id),
 		onSuccess: (data, variables) => {
-			if (variables.id) {
+			if (variables?.id) {
 				toast.success('Post successfully updated!')
 			} else {
 				toast.success('New post successfully created!')
@@ -16,7 +16,15 @@ export function useCreatePost() {
 
 			queryClient.invalidateQueries(['posts'])
 		},
-		onError: (err) => toast.error(err.message),
+		onError: (err) => {
+			const message =
+				typeof err === 'string'
+					? err
+					: err?.message ||
+					  'Something went wrong while saving the tag'
+			toast.error(message)
+			console.error(err)
+		},
 	})
 
 	return { isCreating, createPost }

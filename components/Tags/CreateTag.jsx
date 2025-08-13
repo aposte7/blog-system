@@ -5,14 +5,14 @@ import InputField from '../InputField'
 import { useForm } from 'react-hook-form'
 import { useCreateTags } from './useCreateTags'
 
-const categorySchema = z.object({
+const tagSchema = z.object({
 	name: z.string().min(2, 'Name must be at least 2 characters'),
 	slug: z.string().min(2, 'Slug must be at least 2 characters'),
 	description: z.string().optional(),
 	color: z.string().nonempty('Color is required'),
 })
 
-function CreateTag() {
+function CreateTag({ closeModal, tagData = {} }) {
 	const { createTags, isCreating } = useCreateTags()
 
 	const {
@@ -21,31 +21,30 @@ function CreateTag() {
 		formState: { errors },
 		reset,
 	} = useForm({
-		resolver: zodResolver(categorySchema),
+		resolver: zodResolver(tagSchema),
 		defaultValues: {
-			name: '',
-			slug: '',
-			description: '',
-			color: '#8B5CF6',
+			name: tagData?.name || '',
+			slug: tagData?.slug || '',
+			description: tagData?.description || '',
+			color: tagData?.color || '#5caef6',
 		},
 	})
 
 	const onSubmit = (data) => {
-		createTags(data, {
-			onSuccess: () => {
-				reset()
-				alert('Tag created successfully!')
-			},
-			onError: (err) => {
-				alert('Error creating category: ' + err.message)
-			},
-		})
+		createTags(
+			{ newTag: data, id: tagData?.id || null },
+			{
+				onSuccess: () => {
+					closeModal?.()
+					reset()
+				},
+			}
+		)
 	}
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div className="space-y-4 px-6 w-lg pb-6 max-w-3xl bg-card">
-				{/* Name */}
 				<div>
 					<label
 						htmlFor="name"
@@ -67,7 +66,6 @@ function CreateTag() {
 					)}
 				</div>
 
-				{/* Slug */}
 				<div>
 					<label
 						htmlFor="slug"
@@ -129,11 +127,10 @@ function CreateTag() {
 					)}
 				</div>
 
-				{/* Buttons */}
 				<div className="flex justify-end gap-2">
 					<button
 						type="button"
-						onClick={() => reset()}
+						onClick={() => closeModal()}
 						className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
 					>
 						Cancel
@@ -143,7 +140,9 @@ function CreateTag() {
 						disabled={isCreating}
 						className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
 					>
-						{isCreating ? 'Saving...' : 'Create'}
+						{Object.keys(tagData).length === 0
+							? 'Create'
+							: 'Update'}
 					</button>
 				</div>
 			</div>

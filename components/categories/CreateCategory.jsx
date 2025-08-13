@@ -38,7 +38,6 @@ function CreateCategory({ closeModal, categoryData = {} }) {
 					closeModal?.()
 					reset()
 				},
-				onError: (err) => {},
 			}
 		)
 	}
