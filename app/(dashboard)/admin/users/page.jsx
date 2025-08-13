@@ -1,4 +1,4 @@
-import ComingSoon from '@/components/ComingSoon'
+import { Users } from '@/components/users/Users'
 
-const page = () => <ComingSoon />
+const page = () => <Users />
 export default page
