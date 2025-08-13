@@ -101,6 +101,9 @@ const Home = () => {
 			</div>
 
 			<DashboardChart />
+			<p className="text-danger">
+				Real analytics is coming soon this charts are dummy data{' '}
+			</p>
 
 			<div className="rounded-xl border border-border bg-card shadow-sm">
 				<div className=" p-4">
