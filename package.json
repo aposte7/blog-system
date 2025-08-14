@@ -9,8 +9,9 @@
 	"files": [
 		"blog_system",
 		"lib",
-		"index.css",
+		"app",
 		"bin",
+		"public",
 		"scaffold.json"
 	],
 	"peerDependencies": {
