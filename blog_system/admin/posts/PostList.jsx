@@ -1,18 +1,17 @@
 'use client'
-import CreatePost from '@/components/blog/CreatePost'
-import { useDeletePost } from '@/components/blog/useDeletePost'
-import { usePosts } from '@/components/blog/usePosts'
-import { useUpdatePostFeatured } from '@/components/blog/useUpdatePostFeatured'
-import { Loading } from '@/components/Loading'
-import Menus from '@/components/Menu'
-import Modal, { OpenModal, ViewModal } from '@/components/Modal'
-import PopupConfirm from '@/components/PopupConfirm'
+import CreatePost from '@/blog_system/blog/CreatePost'
+import { useDeletePost } from '@/blog_system/blog/useDeletePost'
+import { usePosts } from '@/blog_system/blog/usePosts'
+import { useUpdatePostFeatured } from '@/blog_system/blog/useUpdatePostFeatured'
+import Menus from '@/blog_system/Menu'
+import Modal, { OpenModal, ViewModal } from '@/blog_system/Modal'
+import PopupConfirm from '@/blog_system/PopupConfirm'
 import TableWrapper, {
 	Table,
 	TableContainer,
 	TableData,
 	TableRow,
-} from '@/components/Table'
+} from '@/blog_system/Table'
 import { dateToString } from '@/lib/utils'
 import { Delete, Edit, Ellipsis, Star, Trash } from 'lucide-react'
 
@@ -21,7 +20,8 @@ const PostList = () => {
 	const { isDeleting, deletePost } = useDeletePost()
 	const { isUpdating, updatePostFeaturedStatus } = useUpdatePostFeatured()
 
-	if (isLoading || isDeleting || isUpdating) return <Loading />
+	if (isLoading || isDeleting || isUpdating)
+		return <p className="h-full w-full mx-auto">Loading...</p>
 
 	return (
 		<Modal>

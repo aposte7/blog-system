@@ -13,13 +13,12 @@ import { useCategories } from './useCategories'
 import useDeleteCategory from './useDeleteCategory'
 import CreateCategory from './CreateCategory'
 import PopupConfirm from '../PopupConfirm'
-import { Loading } from '../Loading'
 
 function CategoriesList() {
 	const { categories, isLoading } = useCategories()
 	const { deleteCategory, isDeleting } = useDeleteCategory()
 
-	if (isLoading || isDeleting) return <Loading />
+	if (isLoading || isDeleting) return <h1>Loading...</h1>
 	return (
 		<TableWrapper>
 			<Table>

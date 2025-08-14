@@ -1,4 +1,4 @@
-import CommentPage from '@/components/comment/CommentPage'
+import CommentPage from '@/blog_system/comment/CommentPage'
 
 const page = () => <CommentPage />
 

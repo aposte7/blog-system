@@ -12,13 +12,12 @@ import Menus from '../Menu'
 import CreateTag from './CreateTag'
 import PopupConfirm from '../PopupConfirm'
 import useDeleteTags from './useDeleteTags'
-import { Loading } from '../Loading'
 
 function TagList() {
 	const { isLoading, tags } = useTags()
 	const { isDeleting, deleteTag } = useDeleteTags()
 
-	if (isLoading || isDeleting) return <Loading />
+	if (isLoading || isDeleting) return <h1>Loading...</h1>
 
 	return (
 		<TableWrapper>

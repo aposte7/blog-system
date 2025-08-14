@@ -1,4 +1,4 @@
-import TagsPage from '@/components/Tags/TagsPage'
+import TagsPage from '@/blog_system/Tags/TagsPage'
 
 function Page() {
 	return <TagsPage />

@@ -1,6 +1,6 @@
-import CreatePost from '@/components/blog/CreatePost'
-import InputField from '@/components/InputField'
-import Modal, { OpenModal, ViewModal } from '@/components/Modal'
+import CreatePost from '@/blog_system/blog/CreatePost'
+import InputField from '@/blog_system/InputField'
+import Modal, { OpenModal, ViewModal } from '@/blog_system/Modal'
 
 import { Filter, Plus } from 'lucide-react'
 import PostList from './PostList'

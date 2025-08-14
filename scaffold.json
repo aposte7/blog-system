@@ -1,85 +1,85 @@
 {
 	"core": [
 		{
-			"from": "components/ComingSoon.jsx",
-			"to": "components/ComingSoon.jsx"
+			"from": "blog_system/ComingSoon.jsx",
+			"to": "blog_system/ComingSoon.jsx"
 		},
-		{ "from": "components/Empty.jsx", "to": "components/Empty.jsx" },
+		{ "from": "blog_system/Empty.jsx", "to": "blog_system/Empty.jsx" },
 		{
-			"from": "components/InputField.jsx",
-			"to": "components/InputField.jsx"
+			"from": "blog_system/InputField.jsx",
+			"to": "blog_system/InputField.jsx"
 		},
-		{ "from": "components/Loading.jsx", "to": "components/Loading.jsx" },
+		{ "from": "blog_system/Loading.jsx", "to": "blog_system/Loading.jsx" },
 		{
-			"from": "components/LoginForm.jsx",
-			"to": "components/LoginForm.jsx"
+			"from": "blog_system/LoginForm.jsx",
+			"to": "blog_system/LoginForm.jsx"
 		},
-		{ "from": "components/Menu.jsx", "to": "components/Menu.jsx" },
-		{ "from": "components/Modal.jsx", "to": "components/Modal.jsx" },
-		{ "from": "components/NavBar.jsx", "to": "components/NavBar.jsx" },
+		{ "from": "blog_system/Menu.jsx", "to": "blog_system/Menu.jsx" },
+		{ "from": "blog_system/Modal.jsx", "to": "blog_system/Modal.jsx" },
+		{ "from": "blog_system/NavBar.jsx", "to": "blog_system/NavBar.jsx" },
 		{
-			"from": "components/PopupConfirm.jsx",
-			"to": "components/PopupConfirm.jsx"
-		},
-		{
-			"from": "components/ProtectedRoute.jsx",
-			"to": "components/ProtectedRoute.jsx"
+			"from": "blog_system/PopupConfirm.jsx",
+			"to": "blog_system/PopupConfirm.jsx"
 		},
 		{
-			"from": "components/QueryProvider.jsx",
-			"to": "components/QueryProvider.jsx"
+			"from": "blog_system/ProtectedRoute.jsx",
+			"to": "blog_system/ProtectedRoute.jsx"
 		},
-		{ "from": "components/Sidebar.jsx", "to": "components/Sidebar.jsx" },
-		{ "from": "components/Table.jsx", "to": "components/Table.jsx" },
 		{
-			"from": "components/useHelpers.js",
-			"to": "components/useHelpers.js"
+			"from": "blog_system/QueryProvider.jsx",
+			"to": "blog_system/QueryProvider.jsx"
 		},
-		{ "from": "components/useLogin.js", "to": "components/useLogin.js" },
-		{ "from": "components/useUser.js", "to": "components/useUser.js" },
+		{ "from": "blog_system/Sidebar.jsx", "to": "blog_system/Sidebar.jsx" },
+		{ "from": "blog_system/Table.jsx", "to": "blog_system/Table.jsx" },
+		{
+			"from": "blog_system/useHelpers.js",
+			"to": "blog_system/useHelpers.js"
+		},
+		{ "from": "blog_system/useLogin.js", "to": "blog_system/useLogin.js" },
+		{ "from": "blog_system/useUser.js", "to": "blog_system/useUser.js" },
 		{ "from": "lib/utils.js", "to": "lib/utils.js" },
 		{ "from": "lib/config.js", "to": "lib/config.js" },
 		{ "from": "globals.css", "to": "app/globals.css", "mode": "append" }
 	],
 	"blog": [
 		{
-			"from": "components/blog",
-			"to": "components/blog",
+			"from": "blog_system/blog",
+			"to": "blog_system/blog",
 			"recursive": true
 		}
 	],
 	"admin": [
 		{
-			"from": "components/admin",
-			"to": "components/admin",
+			"from": "blog_system/admin",
+			"to": "blog_system/admin",
 			"recursive": true
 		}
 	],
 	"categories": [
 		{
-			"from": "components/categories",
-			"to": "components/categories",
+			"from": "blog_system/categories",
+			"to": "blog_system/categories",
 			"recursive": true
 		}
 	],
 	"tags": [
 		{
-			"from": "components/Tags",
-			"to": "components/tags",
+			"from": "blog_system/Tags",
+			"to": "blog_system/tags",
 			"recursive": true
 		}
 	],
 	"comment": [
 		{
-			"from": "components/comment",
-			"to": "components/comment",
+			"from": "blog_system/comment",
+			"to": "blog_system/comment",
 			"recursive": true
 		}
 	],
 	"services": [
 		{
-			"from": "components/services",
-			"to": "components/services",
+			"from": "blog_system/services",
+			"to": "blog_system/services",
 			"recursive": true
 		}
 	],

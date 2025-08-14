@@ -7,7 +7,7 @@
 		"blogui": "./bin/cli.mjs"
 	},
 	"files": [
-		"components",
+		"blog_system",
 		"lib",
 		"index.css",
 		"bin",

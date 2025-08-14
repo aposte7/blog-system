@@ -21,10 +21,10 @@ This repo can be consumed as a component/data hooks library in your own Next.js 
 
 The package name is declared in `package.json` as `blog-system-ui` and exposes:
 
--   `components/*` (React components and hooks)
+-   `blog_system/*` (React blog_system and hooks)
 -   `lib/*` (utilities/config)
 -   `globals.css` (design tokens and Tailwind styles)
--   `index.js` (barrel that re-exports from components/lib and imports CSS)
+-   `index.js` (barrel that re-exports from blog_system/lib and imports CSS)
 
 Below is a step-by-step integration guide.
 
@@ -67,7 +67,7 @@ npm install -D tailwindcss @tailwindcss/postcss
 
 ## 2) Environment variables (Supabase)
 
-The data hooks talk to Supabase using `components/services/supabase.js` and `lib/config.js`:
+The data hooks talk to Supabase using `blog_system/services/supabase.js` and `lib/config.js`:
 
 -   `NEXT_PUBLIC_SUPABASE_URL_ENDPOINT`
 -   `SUPABASE_PRIVATE_KEY` (see important note below)
@@ -87,10 +87,10 @@ Important security note:
 
 Demo-client note (v0.1.x):
 
--   The repository may include a demo Supabase client with hardcoded credentials. When using as a library, ensure the client reads from your env. If consuming via source, replace `components/services/supabase.js` with an env-driven client, e.g.:
+-   The repository may include a demo Supabase client with hardcoded credentials. When using as a library, ensure the client reads from your env. If consuming via source, replace `blog_system/services/supabase.js` with an env-driven client, e.g.:
 
 ```ts
-// components/services/supabase.js (consumer app example)
+// blog_system/services/supabase.js (consumer app example)
 import { createClient } from '@supabase/supabase-js'
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL_ENDPOINT
@@ -119,7 +119,7 @@ Wrap your app with the Query Provider exported by the library:
 
 ```tsx
 // app/layout.tsx (or layout.js)
-import QueryProvider from 'blog-system-ui/components/QueryProvider'
+import QueryProvider from 'blog-system-ui/blog_system/QueryProvider'
 import 'blog-system-ui/globals.css'
 
 export default function RootLayout({ children }) {
@@ -148,7 +148,7 @@ List page (SSR route file; the component is a Client Component internally):
 
 ```tsx
 // app/blog/page.tsx (or page.jsx)
-import BlogPostList from 'blog-system-ui/components/blog/BlogPostList'
+import BlogPostList from 'blog-system-ui/blog_system/blog/BlogPostList'
 
 export default function Page() {
 	return <BlogPostList />
@@ -159,7 +159,7 @@ Detail page with dynamic route:
 
 ```tsx
 // app/blog/[blogId]/page.tsx (or page.jsx)
-import BlogDetailPage from 'blog-system-ui/components/blog/BlogDetailPage'
+import BlogDetailPage from 'blog-system-ui/blog_system/blog/BlogDetailPage'
 
 export default function Page({ params }) {
 	// Pass params so the client component can read blogId
@@ -182,12 +182,12 @@ Hooks behind the scenes:
 
 ## 6) Admin area (optional)
 
-You can reuse admin components under `components/admin` and `components/Tags`/`components/categories` to build an admin dashboard. A simple protected layout can look like this:
+You can reuse admin blog_system under `blog_system/admin` and `blog_system/Tags`/`blog_system/categories` to build an admin dashboard. A simple protected layout can look like this:
 
 ```tsx
 // app/(dashboard)/admin/layout.tsx
-import ProtectedRoute from 'blog-system-ui/components/ProtectedRoute'
-import BlogLayout from 'blog-system-ui/components/blog/BlogLayout'
+import ProtectedRoute from 'blog-system-ui/blog_system/ProtectedRoute'
+import BlogLayout from 'blog-system-ui/blog_system/blog/BlogLayout'
 
 export default function Layout({ children }) {
 	return (
@@ -202,11 +202,11 @@ Implement your own auth inside `ProtectedRoute` (the library exports a placehold
 
 ## 7) Deep imports
 
-You can import specific components/hooks directly:
+You can import specific blog_system/hooks directly:
 
 ```tsx
-import BlogCard from 'blog-system-ui/components/blog/BlogCard'
-import { usePosts } from 'blog-system-ui/components/blog/usePosts'
+import BlogCard from 'blog-system-ui/blog_system/blog/BlogCard'
+import { usePosts } from 'blog-system-ui/blog_system/blog/usePosts'
 import { dateToString } from 'blog-system-ui/lib/utils'
 ```
 
@@ -215,7 +215,7 @@ import { dateToString } from 'blog-system-ui/lib/utils'
 The library ships common mutations for posts, tags, categories, comments (using React Query mutations and `sonner` toasts). Usage pattern:
 
 ```tsx
-import { useCreateTags } from 'blog-system-ui/components/Tags/useCreateTags'
+import { useCreateTags } from 'blog-system-ui/blog_system/Tags/useCreateTags'
 
 export default function CreateTagForm() {
 	const { createTags, isCreating } = useCreateTags()
@@ -240,7 +240,7 @@ General rules:
 -   Don’t pass DOM elements or event objects (avoid circular JSON errors).
 -   The hooks will invalidate related queries automatically (e.g., `['tags']`).
 
-Similar hooks exist for posts and categories under `components/blog` and `components/categories`.
+Similar hooks exist for posts and categories under `blog_system/blog` and `blog_system/categories`.
 
 ## 9) Troubleshooting
 
@@ -253,7 +253,7 @@ Similar hooks exist for posts and categories under `components/blog` and `compon
 Additional tips:
 
 -   Related posts: ensure your query function returns a defined value (`return data ?? []`) so React Query doesn’t throw.
--   Dynamic route params: pass `params` down to client components that need them (e.g., `<BlogDetailPage params={params} />`).
+-   Dynamic route params: pass `params` down to client blog_system that need them (e.g., `<BlogDetailPage params={params} />`).
 -   React Query Devtools: The library enables devtools in `QueryProvider`. That’s helpful in dev; for production, you can fork/wrap the provider to conditionally render devtools.
 
 ## 10) Scripts
@@ -270,7 +270,7 @@ npm run start # start production server
 
 -   Supabase keys in the browser must be anon/public. Route any privileged operations through server-side code.
 -   Tailwind v4 is expected; if you use a different setup, copy the CSS tokens from `globals.css` or adapt your theme.
--   The library exports a lot of Client Components; wrap your app with the provided `QueryProvider` to avoid React Query context errors.
+-   The library exports a lot of Client blog_system; wrap your app with the provided `QueryProvider` to avoid React Query context errors.
 
 ### Tailwind v4 quick config (example)
 
@@ -354,7 +354,7 @@ for update to authenticated using (auth.uid() = author_id);
 
 Note: For production, design policies carefully (draft visibility, moderation, etc.).
 
-### 12.3 Query shapes expected by components
+### 12.3 Query shapes expected by blog_system
 
 The UI uses Supabase queries that return nested relations. Ensure your selects match these shapes.
 
@@ -481,39 +481,39 @@ Public routes
 
 -   `/blog` (app/(root)/blog/page.jsx)
 
-    -   Renders the blog listing via `components/blog/BlogPostList` and supporting UI.
+    -   Renders the blog listing via `blog_system/blog/BlogPostList` and supporting UI.
     -   Uses React Query hooks like `usePosts()` under the hood.
 
 -   `/blog/:blogId` (app/(root)/blog/[blogId]/page.jsx)
-    -   Dynamic route rendering `components/blog/BlogDetailPage`.
+    -   Dynamic route rendering `blog_system/blog/BlogDetailPage`.
     -   Pass route params to the client component: `export default function Page({ params }) { return <BlogDetailPage params={params} /> }`.
     -   The page component/hook expects `params.blogId` and queries Supabase via `usePost({ blogId })`.
 
 Auth route
 
 -   `/login` (app/(auth)/login/page.jsx)
-    -   Renders `components/LoginForm`.
+    -   Renders `blog_system/LoginForm`.
     -   `useLogin()` hook performs mutation and, on success, routes to `/admin`.
 
 Admin routes
 
 -   `/admin` (app/(dashboard)/admin/page.jsx)
 
-    -   Dashboard home. In this repo it renders `components/admin/HomePage`.
+    -   Dashboard home. In this repo it renders `blog_system/admin/HomePage`.
     -   `HomePage` may use helper hooks like `useTotalPosts`, `useTotalComments`, `useTotalViews`.
 
 -   `/admin/categories` (app/(dashboard)/admin/categories/page.jsx)
 
-    -   Renders `components/categories/CategoriesPage` with list/create flows using hooks like `useCategories()` and `useCreateCategories()`.
+    -   Renders `blog_system/categories/CategoriesPage` with list/create flows using hooks like `useCategories()` and `useCreateCategories()`.
 
 -   `/admin/posts` (app/(dashboard)/admin/posts/page.jsx)
 
-    -   Renders `components/admin/posts/PostPage` (which composes `PostList`, `CreatePost`, etc.).
+    -   Renders `blog_system/admin/posts/PostPage` (which composes `PostList`, `CreatePost`, etc.).
     -   Mutations include `useCreatePost`, `useDeletePost`, `useUpdatePostFeatured`, and `useUploadImage`.
 
 -   `/admin/tags` (app/(dashboard)/admin/tags/page.jsx)
 
-    -   Renders `components/Tags/TagsPage` (which composes `TagList`, `CreateTag`).
+    -   Renders `blog_system/Tags/TagsPage` (which composes `TagList`, `CreateTag`).
     -   Mutations via `useCreateTags` and `useDeleteTags`.
 
 -   `/admin/comments` (app/(dashboard)/admin/comments/page.jsx)
@@ -525,14 +525,14 @@ Admin routes
 
 Client vs server notes
 
--   Many components are Client Components (marked `'use client'`) because they rely on React Query, events, and state.
--   Route files (page.jsx) can be Server Components but often just forward `params` to the client component.
--   Ensure all client components used at the page level are wrapped by `QueryProvider` somewhere up the tree (see section 4).
+-   Many blog_system are Client blog_system (marked `'use client'`) because they rely on React Query, events, and state.
+-   Route files (page.jsx) can be Server blog_system but often just forward `params` to the client component.
+-   Ensure all client blog_system used at the page level are wrapped by `QueryProvider` somewhere up the tree (see section 4).
 
 Common pitfalls
 
 -   Default export: Every route file must have a default export that returns a React node.
--   Dynamic params: Don’t forget to pass `{ params }` into client detail components.
+-   Dynamic params: Don’t forget to pass `{ params }` into client detail blog_system.
 -   ProtectedRoute: Ensure it returns `children` only when authenticated; otherwise redirect or render null/loading.
 -   Hydration mismatches: Avoid non-deterministic code at layout boundaries; remove extension-injected attributes in a `useEffect` if necessary.
 
@@ -544,7 +544,7 @@ Root layout (app/layout.tsx or .js)
 
 ```tsx
 // app/layout.tsx
-import QueryProvider from 'blog-system-ui/components/QueryProvider'
+import QueryProvider from 'blog-system-ui/blog_system/QueryProvider'
 import 'blog-system-ui/globals.css'
 
 export default function RootLayout({
@@ -566,7 +566,7 @@ Public layout (app/(root)/layout.tsx)
 
 ```tsx
 // app/(root)/layout.tsx
-import NavBar from 'blog-system-ui/components/NavBar'
+import NavBar from 'blog-system-ui/blog_system/NavBar'
 import { Toaster } from 'sonner'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -584,8 +584,8 @@ Admin layout (app/(dashboard)/admin/layout.tsx)
 
 ```tsx
 // app/(dashboard)/admin/layout.tsx
-import ProtectedRoute from 'blog-system-ui/components/ProtectedRoute'
-import BlogLayout from 'blog-system-ui/components/blog/BlogLayout'
+import ProtectedRoute from 'blog-system-ui/blog_system/ProtectedRoute'
+import BlogLayout from 'blog-system-ui/blog_system/blog/BlogLayout'
 import { Toaster } from 'sonner'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -611,7 +611,7 @@ Login page (app/(auth)/login/page.tsx)
 
 ```tsx
 // app/(auth)/login/page.tsx
-import LoginForm from 'blog-system-ui/components/LoginForm'
+import LoginForm from 'blog-system-ui/blog_system/LoginForm'
 
 export default function Page() {
 	return (
@@ -626,7 +626,7 @@ Blog list (app/(root)/blog/page.tsx)
 
 ```tsx
 // app/(root)/blog/page.tsx
-import BlogPostList from 'blog-system-ui/components/blog/BlogPostList'
+import BlogPostList from 'blog-system-ui/blog_system/blog/BlogPostList'
 
 export default function Page() {
 	return <BlogPostList />
@@ -637,7 +637,7 @@ Blog detail (app/(root)/blog/[blogId]/page.tsx)
 
 ```tsx
 // app/(root)/blog/[blogId]/page.tsx
-import BlogDetailPage from 'blog-system-ui/components/blog/BlogDetailPage'
+import BlogDetailPage from 'blog-system-ui/blog_system/blog/BlogDetailPage'
 
 export default function Page({ params }: { params: { blogId: string } }) {
 	return <BlogDetailPage params={params} />
@@ -648,7 +648,7 @@ Admin dashboard (app/(dashboard)/admin/page.tsx)
 
 ```tsx
 // app/(dashboard)/admin/page.tsx
-import HomePage from 'blog-system-ui/components/admin/HomePage'
+import HomePage from 'blog-system-ui/blog_system/admin/HomePage'
 
 export default function Page() {
 	return <HomePage />
@@ -659,7 +659,7 @@ Admin categories (app/(dashboard)/admin/categories/page.tsx)
 
 ```tsx
 // app/(dashboard)/admin/categories/page.tsx
-import CategoriesPage from 'blog-system-ui/components/categories/CategoriesPage'
+import CategoriesPage from 'blog-system-ui/blog_system/categories/CategoriesPage'
 
 export default function Page() {
 	return <CategoriesPage />
@@ -670,7 +670,7 @@ Admin posts (app/(dashboard)/admin/posts/page.tsx)
 
 ```tsx
 // app/(dashboard)/admin/posts/page.tsx
-import PostPage from 'blog-system-ui/components/admin/posts/PostPage'
+import PostPage from 'blog-system-ui/blog_system/admin/posts/PostPage'
 
 export default function Page() {
 	return <PostPage />
@@ -681,7 +681,7 @@ Admin tags (app/(dashboard)/admin/tags/page.tsx)
 
 ```tsx
 // app/(dashboard)/admin/tags/page.tsx
-import TagsPage from 'blog-system-ui/components/Tags/TagsPage'
+import TagsPage from 'blog-system-ui/blog_system/Tags/TagsPage'
 
 export default function Page() {
 	return <TagsPage />
@@ -692,7 +692,7 @@ Admin comments (app/(dashboard)/admin/comments/page.tsx)
 
 ```tsx
 // app/(dashboard)/admin/comments/page.tsx
-import CommentPage from 'blog-system-ui/components/comment/CommentPage'
+import CommentPage from 'blog-system-ui/blog_system/comment/CommentPage'
 
 export default function Page() {
 	return <CommentPage />
@@ -703,7 +703,7 @@ Admin users (app/(dashboard)/admin/users/page.tsx)
 
 ```tsx
 // app/(dashboard)/admin/users/page.tsx
-import UsersPage from 'blog-system-ui/components/users/UsersPage'
+import UsersPage from 'blog-system-ui/blog_system/users/UsersPage'
 
 export default function Page() {
 	return <UsersPage />
@@ -714,5 +714,5 @@ Notes
 
 -   Every route file must default-export a React component.
 -   For dynamic routes, pass `params` to the client component that needs them.
--   Ensure `QueryProvider` is present above any client components using React Query.
+-   Ensure `QueryProvider` is present above any client blog_system using React Query.
 -   If your project doesn’t use TypeScript, drop the type annotations.

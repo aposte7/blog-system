@@ -17,8 +17,8 @@ const flags = new Set(args.slice(1))
 function usage() {
 	console.log(`blogui - copy blog-system-ui source into your app
 Usage:
-  npx blog-system-ui init        # copy components, lib, and index.css
-  npx blog-system-ui add comp    # copy only components
+  npx blog-system-ui init        # copy blog_system, lib, and index.css
+  npx blog-system-ui add comp    # copy only blog_system
   npx blog-system-ui add lib     # copy only lib
   npx blog-system-ui add css     # copy only index.css
 
@@ -57,11 +57,11 @@ async function copyFile(src, dest, overwrite = false) {
 	log('copied:', path.relative(process.cwd(), dest))
 }
 
-async function copyComponents(projectRoot, overwrite) {
-	const from = path.join(PKG_ROOT, 'components')
-	const to = path.join(projectRoot, 'components')
+async function copyblog_system(projectRoot, overwrite) {
+	const from = path.join(PKG_ROOT, 'blog_system')
+	const to = path.join(projectRoot, 'blog_system')
 	if (!fs.existsSync(from)) {
-		err('source components/ not found in package')
+		err('source blog_system/ not found in package')
 		return
 	}
 	if (flags.has('--dry')) {
@@ -118,7 +118,7 @@ async function run() {
 	if (cmd === 'help' || args.length === 0) return usage()
 
 	if (cmd === 'init') {
-		await copyComponents(projectRoot, overwrite)
+		await copyblog_system(projectRoot, overwrite)
 		await copyLib(projectRoot, overwrite)
 		await copyCss(projectRoot, overwrite)
 		log('done. import the CSS in your app root, e.g.: import "./index.css"')
@@ -128,7 +128,7 @@ async function run() {
 	if (cmd === 'add') {
 		const what = args[1]
 		if (what === 'comp') {
-			await copyComponents(projectRoot, overwrite)
+			await copyblog_system(projectRoot, overwrite)
 			return
 		}
 		if (what === 'lib') {
