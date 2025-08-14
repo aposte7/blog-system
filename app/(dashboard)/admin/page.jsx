@@ -1,4 +1,4 @@
-import Home from '@/components/admin/Home'
+import Home from '@/blog_system/admin/Home'
 
 const Page = () => {
 	return <Home />

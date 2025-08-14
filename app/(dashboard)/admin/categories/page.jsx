@@ -1,4 +1,4 @@
-import Categories from '@/components/categories/Categories'
+import Categories from '@/blog_system/categories/Categories'
 
 function Page() {
 	return <Categories />

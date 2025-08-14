@@ -1,4 +1,4 @@
-import PostPage from '@/components/admin/posts/PostPage'
+import PostPage from '@/blog_system/admin/posts/PostPage'
 
 const Page = () => {
 	return <PostPage />

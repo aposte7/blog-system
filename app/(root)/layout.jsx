@@ -1,4 +1,4 @@
-import NavBar from '@/components/NavBar'
+import NavBar from '@/blog_system/NavBar'
 import { Toaster } from 'sonner'
 
 const Layout = ({ children }) => {
