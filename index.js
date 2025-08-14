@@ -17,14 +17,12 @@ export * from './components/useHelpers.js'
 export * from './components/useLogin.js'
 export * from './components/useUser.js'
 
-// Admin, Blog, Categories, Comment, Services, Tags, Users
 export * from './components/admin'
 export * from './components/blog'
 export * from './components/categories'
 export * from './components/comment'
 export * from './components/services'
-export * from './components/Tags'
+export * from './components/Tags' // matches current folder name
 export * from './components/users'
 
-// Re-export CSS for optional import
 import './globals.css'

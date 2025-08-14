@@ -1,4 +1,4 @@
-import ComingSoon from '../ComingSoon'
+import ComingSoon from '../ComingSoon.jsx'
 
 const CommentPage = () => {
 	return <ComingSoon />
