@@ -1,0 +1,105 @@
+{
+	"core": [
+		{
+			"from": "components/ComingSoon.jsx",
+			"to": "components/ComingSoon.jsx"
+		},
+		{ "from": "components/Empty.jsx", "to": "components/Empty.jsx" },
+		{
+			"from": "components/InputField.jsx",
+			"to": "components/InputField.jsx"
+		},
+		{ "from": "components/Loading.jsx", "to": "components/Loading.jsx" },
+		{
+			"from": "components/LoginForm.jsx",
+			"to": "components/LoginForm.jsx"
+		},
+		{ "from": "components/Menu.jsx", "to": "components/Menu.jsx" },
+		{ "from": "components/Modal.jsx", "to": "components/Modal.jsx" },
+		{ "from": "components/NavBar.jsx", "to": "components/NavBar.jsx" },
+		{
+			"from": "components/PopupConfirm.jsx",
+			"to": "components/PopupConfirm.jsx"
+		},
+		{
+			"from": "components/ProtectedRoute.jsx",
+			"to": "components/ProtectedRoute.jsx"
+		},
+		{
+			"from": "components/QueryProvider.jsx",
+			"to": "components/QueryProvider.jsx"
+		},
+		{ "from": "components/Sidebar.jsx", "to": "components/Sidebar.jsx" },
+		{ "from": "components/Table.jsx", "to": "components/Table.jsx" },
+		{
+			"from": "components/useHelpers.js",
+			"to": "components/useHelpers.js"
+		},
+		{ "from": "components/useLogin.js", "to": "components/useLogin.js" },
+		{ "from": "components/useUser.js", "to": "components/useUser.js" },
+		{ "from": "lib/utils.js", "to": "lib/utils.js" },
+		{ "from": "lib/config.js", "to": "lib/config.js" },
+		{ "from": "globals.css", "to": "app/globals.css", "mode": "append" }
+	],
+	"blog": [
+		{
+			"from": "components/blog",
+			"to": "components/blog",
+			"recursive": true
+		}
+	],
+	"admin": [
+		{
+			"from": "components/admin",
+			"to": "components/admin",
+			"recursive": true
+		}
+	],
+	"categories": [
+		{
+			"from": "components/categories",
+			"to": "components/categories",
+			"recursive": true
+		}
+	],
+	"tags": [
+		{
+			"from": "components/Tags",
+			"to": "components/tags",
+			"recursive": true
+		}
+	],
+	"comment": [
+		{
+			"from": "components/comment",
+			"to": "components/comment",
+			"recursive": true
+		}
+	],
+	"services": [
+		{
+			"from": "components/services",
+			"to": "components/services",
+			"recursive": true
+		}
+	],
+	"routes": [
+		{
+			"from": "app/(root)/blog/page.jsx",
+			"to": "app/(root)/blog/page.jsx"
+		},
+		{
+			"from": "app/(root)/blog/[blogId]/page.jsx",
+			"to": "app/(root)/blog/[blogId]/page.jsx"
+		},
+		{
+			"from": "app/(dashboard)/admin",
+			"to": "app/(dashboard)/admin",
+			"recursive": true
+		},
+		{
+			"from": "app/(auth)/login/page.jsx",
+			"to": "app/(auth)/login/page.jsx"
+		}
+	]
+}

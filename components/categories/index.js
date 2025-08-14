@@ -1,6 +1,0 @@
-export { default as CategoriesList } from './CategoriesList.jsx'
-export { default as CategoriesPage } from './CategoriesPage.jsx'
-export { default as CreateCategory } from './CreateCategory.jsx'
-export * from './useCategories.js'
-export * from './useCreateCategories.js'
-export * from './useDeleteCategory.js'

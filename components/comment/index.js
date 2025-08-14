@@ -1,5 +1,0 @@
-export { default as Comment } from './Comment.jsx'
-export { default as CommentForm } from './CommentForm.jsx'
-export { default as CommentPage } from './CommentPage.jsx'
-export * from './useComments.js'
-export * from './useCreateComments.js'

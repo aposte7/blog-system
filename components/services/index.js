@@ -1,7 +1,0 @@
-export * from './authApi.js'
-export * from './categoriesApi.js'
-export * from './commentApi.js'
-export * from './helperApi.js'
-export * from './postApi.js'
-export * from './supabase.js'
-export * from './tagApi.js'
