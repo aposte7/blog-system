@@ -1,4 +1,4 @@
-import { timeAgo } from '@/src/lib/utils'
+import { timeAgo } from '@/lib/utils'
 import Empty from '../Empty'
 import { Loading } from '../Loading'
 import { useComments } from './useComments'

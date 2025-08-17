@@ -1,4 +1,4 @@
-import config from '@/src/lib/config'
+import config from '@/lib/config'
 import { createClient } from '@supabase/supabase-js'
 
 export const supabaseUrl = config.env.supabase.urlEndpoint

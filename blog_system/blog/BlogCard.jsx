@@ -1,6 +1,6 @@
 import { Calendar, Clock, Eye } from 'lucide-react'
 import Image from 'next/image'
-import { cn } from '@/src/lib/utils'
+import { cn } from '@/lib/utils'
 
 const BlogCard = ({ children, className = '' }) => {
 	return (

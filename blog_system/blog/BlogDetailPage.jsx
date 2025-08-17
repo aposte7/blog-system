@@ -23,7 +23,7 @@ import BlogCard, {
 	BlogCardTitle,
 } from './BlogCard'
 import { useRelatedPosts } from './useRelatedPost'
-import { dateToString } from '@/src/lib/utils'
+import { dateToString } from '@/lib/utils'
 import CommentForm from '../comment/CommentForm'
 import Comment from '../comment/Comment'
 

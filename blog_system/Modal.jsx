@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@/src/lib/utils'
+import { cn } from '@/lib/utils'
 import { X } from 'lucide-react'
 import { cloneElement, createContext, useContext, useState } from 'react'
 import { createPortal } from 'react-dom'

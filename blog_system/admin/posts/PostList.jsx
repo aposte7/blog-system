@@ -12,7 +12,7 @@ import TableWrapper, {
 	TableData,
 	TableRow,
 } from '@/src/blog_system/Table'
-import { dateToString } from '@/src/lib/utils'
+import { dateToString } from '@/lib/utils'
 import { Delete, Edit, Ellipsis, Star, Trash } from 'lucide-react'
 
 const PostList = () => {

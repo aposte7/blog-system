@@ -2,7 +2,7 @@ import React from 'react'
 import { ArrowRight, BookOpen, ChartLine, Users } from 'lucide-react'
 import NavBar from '../NavBar'
 import Image from 'next/image'
-import { cn } from '@/src/lib/utils'
+import { cn } from '@/lib/utils'
 
 const BlogHeader = () => {
 	return (

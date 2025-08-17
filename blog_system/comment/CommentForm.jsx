@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { MessageCircle } from 'lucide-react'
 import InputField from '../InputField'
-import { cn } from '@/src/lib/utils'
+import { cn } from '@/lib/utils'
 import { useCreateComments } from './useCreateComments'
 
 const commentSchema = z.object({
