@@ -1,0 +1,153 @@
+'use client';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import InputField from '../../components/InputField';
+import { useForm } from 'react-hook-form';
+import { useCreateTags } from './useCreateTags';
+
+const tagSchema = z.object({
+	name: z.string().min(2, 'Name must be at least 2 characters'),
+	slug: z.string().min(2, 'Slug must be at least 2 characters'),
+	description: z.string().optional(),
+	color: z.string().nonempty('Color is required'),
+});
+
+function CreateTag({ closeModal, tagData = {} }) {
+	const { createTags, isCreating } = useCreateTags();
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		reset,
+	} = useForm({
+		resolver: zodResolver(tagSchema),
+		defaultValues: {
+			name: tagData?.name || '',
+			slug: tagData?.slug || '',
+			description: tagData?.description || '',
+			color: tagData?.color || '#5caef6',
+		},
+	});
+
+	const onSubmit = (data) => {
+		createTags(
+			{ newTag: data, id: tagData?.id || null },
+			{
+				onSuccess: () => {
+					closeModal?.();
+					reset();
+				},
+			}
+		);
+	};
+
+	return (
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<div className="space-y-4 px-6 w-lg pb-6 max-w-3xl bg-card">
+				<div>
+					<label
+						htmlFor="name"
+						className="block text-sm font-medium text-gray-700"
+					>
+						Category Name
+					</label>
+					<InputField
+						type="text"
+						id="name"
+						placeholder="Enter category name"
+						{...register('name')}
+						className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+					/>
+					{errors.name && (
+						<p className="text-red-500 text-xs">
+							{errors.name.message}
+						</p>
+					)}
+				</div>
+
+				<div>
+					<label
+						htmlFor="slug"
+						className="block text-sm font-medium text-gray-700"
+					>
+						Slug
+					</label>
+					<InputField
+						type="text"
+						id="slug"
+						placeholder="category-slug"
+						{...register('slug')}
+						className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+					/>
+					{errors.slug && (
+						<p className="text-red-500 text-xs">
+							{errors.slug.message}
+						</p>
+					)}
+				</div>
+
+				<div>
+					<label
+						htmlFor="description"
+						className="block text-sm font-medium text-gray-700"
+					>
+						Description
+					</label>
+					<textarea
+						id="description"
+						placeholder="Category description"
+						{...register('description')}
+						className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+					></textarea>
+					{errors.description && (
+						<p className="text-red-500 text-xs">
+							{errors.description.message}
+						</p>
+					)}
+				</div>
+
+				<div>
+					<label
+						htmlFor="color"
+						className="block text-sm font-medium text-gray-700"
+					>
+						Color
+					</label>
+					<InputField
+						type="color"
+						id="color"
+						{...register('color')}
+						className="mt-1 h-10 w-full cursor-pointer rounded-md border border-gray-300"
+					/>
+					{errors.color && (
+						<p className="text-red-500 text-xs">
+							{errors.color.message}
+						</p>
+					)}
+				</div>
+
+				<div className="flex justify-end gap-2">
+					<button
+						type="button"
+						onClick={() => closeModal()}
+						className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+					>
+						Cancel
+					</button>
+					<button
+						type="submit"
+						disabled={isCreating}
+						className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+					>
+						{Object.keys(tagData).length === 0
+							? 'Create'
+							: 'Update'}
+					</button>
+				</div>
+			</div>
+		</form>
+	);
+}
+
+export default CreateTag;

@@ -1,7 +1,9 @@
 {
-  "compilerOptions": {
-    "paths": {
-      "@/*": ["./*"]
-    }
-  }
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["src/*"] // alias '@' points to src
+		}
+	},
+	"include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }
