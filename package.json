@@ -19,7 +19,8 @@
 	"main": "index.js",
 	"type": "module",
 	"bin": {
-		"blogui": "./bin/cli.mjs"
+		"blogui": "./bin/cli.mjs",
+		"blog-system-ui": "./bin/cli.mjs"
 	},
 	"files": [
 		"src",
