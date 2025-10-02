@@ -1,8 +1,23 @@
 {
 	"name": "blog-system-ui",
-	"version": "0.1.9",
+	"version": "0.1.10",
 	"private": false,
+	"description": "Blog UI copier (shadcn-style) with features, admin, Supabase hooks.",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/your-user/blog-system-ui.git"
+	},
+	"keywords": [
+		"blog",
+		"supabase",
+		"react",
+		"nextjs",
+		"tailwind",
+		"shadcn-style"
+	],
 	"main": "index.js",
+	"type": "module",
 	"bin": {
 		"blogui": "./bin/cli.mjs"
 	},
@@ -12,7 +27,8 @@
 		"public",
 		"index.css",
 		"README.md",
-		"scaffold.json"
+		"scaffold.json",
+		"package.json"
 	],
 	"peerDependencies": {
 		"next": ">=13.0.0",
