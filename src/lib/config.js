@@ -2,9 +2,9 @@ const config = {
 	env: {
 		supabase: {
 			urlEndpoint: process.env.NEXT_PUBLIC_SUPABASE_URL_ENDPOINT,
-			privateKey: process.env.SUPABASE_PRIVATE_KEY,
+			anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
 		},
 	},
-}
+};
 
-export default config
+export default config;

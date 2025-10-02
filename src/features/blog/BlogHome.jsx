@@ -105,7 +105,7 @@ const BlogRecentPosts = () => {
 			<div className="recent-blog-wrapper divide-y divide-border">
 				{isLoading ? (
 					<Loading />
-				) : posts.length === 0 ? (
+				) : posts?.length === 0 ? (
 					<p className="py-4 text-sm text-muted-foreground">
 						No recent posts available.
 					</p>

@@ -133,7 +133,9 @@ const PostList = () => {
 									<TableData>{post.views}</TableData>
 									<TableData className="relative z-50">
 										<Menus>
-											<Menus.Toggle id="post-action">
+											<Menus.Toggle
+												id={`post-action-${post.id}`}
+											>
 												<button
 													className="rounded-sm px-1 py-1 transition-colors hover:bg-card"
 													aria-label="More options"
@@ -145,8 +147,8 @@ const PostList = () => {
 												</button>
 											</Menus.Toggle>
 											<Menus.MenuViews
+												id={`post-action-${post.id}`}
 												className="absolute  overflow-visible -top-[100%] left-0"
-												id="post-action"
 											>
 												<OpenModal
 													name={`edit-post-${post.slug}${post.id}`}
