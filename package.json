@@ -7,11 +7,11 @@
 		"blogui": "./bin/cli.mjs"
 	},
 	"files": [
-		"blog_system",
-		"lib",
-		"app",
+		"src",
 		"bin",
 		"public",
+		"index.css",
+		"README.md",
 		"scaffold.json"
 	],
 	"peerDependencies": {

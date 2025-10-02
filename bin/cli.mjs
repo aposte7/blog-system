@@ -199,7 +199,7 @@ async function run() {
 	usage();
 }
 
-// run().catch((e) => {
-// 	err(e?.stack || e?.message || String(e));
-// 	process.exit(1);
-// });
+run().catch((e) => {
+	err(e?.stack || e?.message || String(e));
+	process.exit(1);
+});
