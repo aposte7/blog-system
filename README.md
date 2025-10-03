@@ -58,6 +58,16 @@ npm run dev
 
 Open `src/app/(root)/blog` and `/admin` pages in your browser.
 
+## Video Guide
+
+Watch a step-by-step walkthrough of installing and using the package:
+
+[![How to use blog-system-ui](https://img.youtube.com/vi/xUbtkntVkHw/0.jpg)](https://youtu.be/xUbtkntVkHw)
+
+**YouTube:** [https://youtu.be/xUbtkntVkHw](https://youtu.be/xUbtkntVkHw)
+
+IMPORTANT (images): Before loading post images, create a Supabase Storage bucket named `blog-images` (Settings -> Storage -> New bucket) and make it public (or add RLS policies). The Next.js `next.config.mjs` remote patterns expect this exact bucket name.
+
 ## Installation & Copy
 
 1. Install the package (`npm install blog-system-ui`).
@@ -161,7 +171,10 @@ Avoid `import 'tailwindcss'` in CSS when using PostCSS.
 ## Supabase Setup
 
 1. Create a Supabase project (you can name it `blog`).
-2. Create a Storage bucket named `blog-images`.
+2. Create a Storage bucket named **`blog-images`** (exact name) via Dashboard: Storage → New bucket → Name: `blog-images` → Public access (or keep private and add signed URL logic later). This name is hard-coded in the default image upload & Next.js remote pattern; if you change it, update:
+    - `next.config.mjs` remotePatterns host/path
+    - any upload utilities referencing `blog-images`
+    - database image URL builders
 3. Run the schema from the repo's `sql/` folder (enable `pgcrypto` if required for UUIDs).
 4. Set RLS policies to allow public reads for published posts & active taxonomy; restrict writes to authenticated users or roles.
 5. Use the anon key on the client; service role key only in server code (API routes, server actions, or route handlers).
